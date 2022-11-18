@@ -1,0 +1,463 @@
+<template>
+  <div class="list-header">
+    <div class="printClass" >
+      <div class="scan" :ref="'lessonTableImg'">
+        <vue-qr
+          class="scanImg"
+          :text="'http://14.29.254.232:50025/tenderings/redirect/scanResult?pojectNo='+pojectNo"
+          :margin="0"
+          :logoScale="0.2"
+        >
+        </vue-qr>
+      </div>
+    </div>
+    <el-form v-model="search" :size="'mini'" :label-width="'80px'">
+      <el-row :gutter="10">
+        <el-col :span="4">
+          <el-form-item :label="'关键字'">
+            <el-input v-model="search.name" placeholder="名称"/>
+          </el-form-item>
+        </el-col>
+        <el-col :span="2">
+          <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="query">查询</el-button>
+        </el-col>
+        <el-button-group style="float:right">
+          <!--  <el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>-->
+          <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">修改</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>
+          <!--<el-popover
+            placement="left"
+            width="400"
+            trigger="manual"
+            v-model="assVisible"
+          >
+            <el-form-item :label="'员工'">
+              <el-select
+                v-model="user"
+                filterable
+                remote
+                placeholder="请输入关键词"
+                :remote-method="remoteMethod"
+                :loading="loading"
+                class="width-full">
+                <el-option :label="t.name" :value="t.uid" v-for="(t,i) in levelFormat"
+                           :key="i"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item style="text-align: center">
+              <el-button type="primary" @click="onSubmit">选择</el-button>
+            </el-form-item>
+            <el-button slot="reference" :size="'mini'" type="primary" icon="el-icon-thumb" @click="assignment">分派
+            </el-button>
+          </el-popover>-->
+         <!-- <el-button :size="'mini'" type="primary" icon="el-icon-download" @click="download(1)">采购文件下载</el-button>-->
+          <el-button :size="'mini'" type="primary" icon="el-icon-download" @click="download(2)">采购文件模板下载</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-upload2" @click="uploadFile">招标文件</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-download" @click="exportScan">导出二维码</el-button>
+          <!--<el-button :size="'mini'" type="primary" icon="el-icon-view" @click="handleAudit">审核</el-button>-->
+        <!--  <el-dropdown @command="handlerBtn" trigger="click">
+            <el-button :size="'mini'" type="primary">
+              审核<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="1">通过</el-dropdown-item>
+              <el-dropdown-item command="2">驳回</el-dropdown-item>
+              &lt;!&ndash;<el-dropdown-item command="3">反审</el-dropdown-item>&ndash;&gt;
+            </el-dropdown-menu>
+          </el-dropdown>-->
+          <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
+        </el-button-group>
+      </el-row>
+    </el-form>
+    <el-dialog
+      :visible.sync="visible"
+      title="请选择文件类型"
+      v-if="visible"
+      :width="'20%'"
+      destroy-on-close
+      append-to-body
+    >
+      <el-form label-width="130px" :size="'mini'">
+        <el-row :span="20" v-if="exFile==1">
+          <el-checkbox-group v-model="checkList">
+            <el-checkbox style="width: 100%" :label="0">委托协议（工程）</el-checkbox>
+            <el-checkbox style="width: 100%" :label="1">招标文件（报价）</el-checkbox>
+            <el-checkbox style="width: 100%" :label="2">招标文件（摇珠）</el-checkbox>
+            <el-checkbox style="width: 100%" :label="3">招标文件确认书</el-checkbox>
+          </el-checkbox-group>
+        </el-row>
+        <el-row :span="20" v-else>
+          <el-radio-group v-model="radio">
+            <el-radio style="width: 100%" label="招标文件-报折扣率.doc">招标文件-报折扣率.doc</el-radio>
+            <el-radio style="width: 100%" label="招标文件-报总价（服务类）.doc">招标文件-报总价（服务类）.doc</el-radio>
+            <el-radio style="width: 100%" label="招标文件-报总价（货物类）.doc">招标文件-报总价（货物类）.doc</el-radio>
+            <el-radio style="width: 100%" label="竞争性磋商文件.doc">竞争性磋商文件.doc</el-radio>
+          </el-radio-group>
+        </el-row>
+      </el-form>
+      <div slot="footer" style="text-align:center;padding-top: 15px">
+        <el-button type="success" @click="confirm">确认</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
+<script>import {mapGetters} from 'vuex'
+import {alterClerk, downloadFile} from '@/api/basic/index'
+import {getByUserAndPrId, getUsersList} from '@/api/system/index'
+import {addProjectInitiation, projectAudit,projectAuditNo} from '@/api/extension/index'
+import fileDownload from 'js-file-download'
+import ajax from "@/utils/ajax"
+import html2Canvas from 'html2canvas'
+import Canvas2Image from 'Canvas2Image'
+import vueQr from 'vue-qr'
+export default {
+  components: {
+    vueQr
+  },
+  computed: {
+    ...mapGetters(['node', 'clickData', 'selections'])
+  },
+  data() {
+    return {
+      user: null,
+      btnList: [],
+      checkList: [],
+      levelFormat: [],
+      radio: 0,
+      pojectNo: '',
+      loading: false,
+      userArray: [{
+        label: 'Alaska',
+        value: 'Alaska'
+      }, {
+        label: 'Alabama',
+        value: 'Alabama'
+      }],
+      exFile: null,
+      visible: null,
+      assVisible: false,
+      search: {
+        name: null
+      }
+    };
+  },
+  mounted() {
+    let path = this.$route.meta.id
+    /* getByUserAndPrId(path).then(res => {
+       this.btnList = res.data
+       this.$forceUpdate();
+     });*/
+    this.fetchFormat()
+  },
+  methods: {
+    exportScan() {
+      if (this.clickData.id) {
+        this.pojectNo = this.clickData.pojectNo
+        html2Canvas(this.$refs.lessonTableImg, {
+          dpi: window.devicePixelRatio * 4,
+          useCORS: true // 【重要】开启跨域配置
+        }).then((canvas) => {
+          this.convertCanvasToImage(canvas);
+        })
+      } else {
+        this.$message({
+          message: '无选中行',
+          type: 'warning'
+        });
+      }
+    },
+    // 获取设备的devicePixelRatio
+    getPixelRatio(context) {
+      let backingStore = context.backingStorePixelRatio ||
+        context.webkitBackingStorePixelRatio ||
+        context.mozBackingStorePixelRatio ||
+        context.msBackingStorePixelRatio ||
+        context.oBackingStorePixelRatio ||
+        context.backingStorePixelRatio || 1;
+      return (window.devicePixelRatio || 1) / backingStore;
+    },
+    convertCanvasToImage(canvas) {
+      var image = new Image();
+      image.src = canvas.toDataURL("image/jpg");
+      document.body.appendChild(image);
+      this.downloadImage(image.src)
+      return image;
+    },
+    // 下载图片地址和保存的图片名称
+    downloadImage(imgsrc, name) {
+      let that = this
+      var image = new Image()
+      image.setAttribute('crossOrigin', 'anonymous')
+      image.onload = function () {
+        var canvas = document.createElement('canvas')
+        let w = image.width;
+        let h = image.height;
+        var context = canvas.getContext('2d')
+        var ratio = that.getPixelRatio(context);
+        canvas.width = w * ratio;
+        canvas.height = h * ratio;
+        context.drawImage(image, 0, 0, canvas.width, canvas.height)
+        context.scale(ratio, ratio);
+        var url = Canvas2Image.convertToJPEG(canvas, w, h).src// 得到图片的base64编码数据
+        var a = document.createElement('a') // 生成一个a元素
+        var event = new MouseEvent('click') // 创建一个单击事件
+        a.download = name || 'photo' // 设置图片名称
+        a.href = url // 将生成的URL设置为a.href属性
+        a.dispatchEvent(event) // 触发a的单击事件
+      }
+      image.src = imgsrc
+    },
+    handleAudit() {
+      if (this.clickData.id) {
+        projectAudit({id: this.clickData.id}).then(res => {
+          if (res.flag) {
+            this.upload()
+          }
+        })
+      } else {
+        this.$message({
+          message: '无选中行',
+          type: 'warning'
+        });
+      }
+    },
+    handleUnAudit() {
+      if (this.clickData.id) {
+        projectAuditNo({id: this.clickData.id}).then(res => {
+          if (res.flag) {
+            this.upload()
+          }
+        })
+      } else {
+        this.$message({
+          message: '无选中行',
+          type: 'warning'
+        });
+      }
+
+    },
+    uploadFile() {
+      if (this.clickData.id) {
+        this.$emit('showFildDialog', this.clickData)
+      } else {
+        this.$message({
+          message: '无选中行',
+          type: 'warning'
+        })
+      }
+    },
+    handlerBtn(command) {
+      if(command=='1') {
+        this.handleAudit();
+      }else if(command=='2') {
+        this.handleUnAudit();
+      }else if(command=='3') {
+        this.$emit('showDialog')
+      }
+    },
+    remoteMethod(query) {
+      if (query !== '') {
+        this.loading = true;
+        this.fetchFormat({'name': query})
+      } else {
+        this.list = [];
+      }
+    },
+    download(val) {
+      this.exFile = val
+      if (this.exFile == 1) {
+        if (this.clickData.id) {
+          this.visible = true
+        } else {
+          this.$message({
+            message: '无选中行',
+            type: 'warning'
+          })
+        }
+      } else {
+        this.visible = true
+      }
+    },
+    onSubmit() {
+      /*if (this.selections.length > 0) {
+        this.selections.forEach((item, index) => {
+          addProjectInitiation({dispatcher: this.user, id: item.id}).then(res => {
+            if (res.flag) {
+              this.assVisible = false
+              this.upload()
+            }
+          })
+        })
+      }*/
+      if (this.clickData.id) {
+        addProjectInitiation({dispatcherId: this.user, id: this.clickData.id}).then(res => {
+          if (res.flag) {
+            this.assVisible = false
+            this.upload()
+          }
+        })
+      }
+    },
+    confirm() {
+      if (this.exFile == '1') {
+        this.checkList.forEach((item, index) => {
+          ajax.downloadFile(`${window.location.origin}/tenderings/file/download?fileName=1667018624973.xlsx`, {}, {fileName: '1667018624973.xlsx'})
+          if (index + 1 == this.checkList.length) {
+            this.$message({
+              type: 'success',
+              message: '下载成功'
+            })
+          }
+        })
+      } else {
+          console.log(this.radio)
+          ajax.downloadFile(`${window.location.origin}/tenderings/file/download?fileName=` + this.radio, {}, {fileName: this.radio})
+          /* downloadFile({fileName: '1667018624973.xlsx'}).then(res => {
+             fileDownload(res.data, '1667018624973.xlsx')
+             this.$message({
+               type: 'success',
+               message: '下载成功'
+             })
+           })*/
+      }
+
+    },
+    onFun(method) {
+      this[method]()
+    },
+    fetchFormat(val) {
+      const data = {
+        pageNum: 1,
+        pageSize: 10
+      };
+      getUsersList(data, val).then(res => {
+        if (res.flag) {
+          this.loading = false;
+          this.levelFormat = res.data.records
+        }
+      });
+    },
+    assignment() {
+      if (this.clickData.id) {
+        this.assVisible = !this.assVisible
+        /*if(this.clickData.status == "0"){
+          this.assVisible = !this.assVisible
+        }else{
+          this.$message({
+            message: '项目已提交',
+            type: 'warning'
+          });
+        }*/
+      } else {
+        this.$message({
+          message: '无选中行',
+          type: 'warning'
+        });
+      }
+    },
+    Delivery() {
+      if (this.clickData.id) {
+        this.$confirm('是否删除（' + this.clickData.projectName + '），删除后将无法恢复?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$emit('delList', {
+            id: this.clickData.id
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      } else {
+        this.$message({
+          message: '无选中行',
+          type: 'warning'
+        })
+      }
+    },
+    alter() {
+      if (this.clickData.id) {
+        this.$emit('showDialog', this.clickData)
+      } else {
+        this.$message({
+          message: '无选中行',
+          type: 'warning'
+        })
+      }
+    },
+    disable() {
+      if (this.clickData.id) {
+        this.clickData.disable = true
+        alterClerk(this.clickData).then(res => {
+          if (res.flag) {
+            this.$emit('uploadList')
+          }
+        });
+      } else {
+        this.$message({
+          message: '无选中行',
+          type: 'warning'
+        });
+      }
+    },
+    enable() {
+      if (this.clickData.id) {
+        this.clickData.disable = false
+        alterClerk(this.clickData).then(res => {
+          if (res.flag) {
+            this.$emit('uploadList')
+          }
+        })
+      } else {
+        this.$message({
+          message: '无选中行',
+          type: 'warning'
+        });
+      }
+    },
+    query() {
+      this.$emit('queryBtn', this.qFilter())
+    },
+    upload() {
+      this.search.name = ''
+      this.$emit('uploadList')
+    },
+    // 查询条件过滤
+    qFilter() {
+      let obj = {}
+      this.search.name != null && this.search.name != '' ? obj.projectName = this.search.name : null
+      return obj
+    },
+    handleAdd() {
+      this.$emit('showDialog')
+    }
+  }
+};
+</script>
+
+<style>
+  .printClass {
+    width: 0;
+    height: 0;
+    overflow: hidden;
+  }
+  .scan {
+    width: 32mm;
+    padding: 1mm;
+    font-weight: 500;
+    font-size: 12px;
+  }
+  .img-scan {
+    width: 20mm;
+    height: 20mm;
+  }
+
+  .scanImg {
+    height: 30mm;
+    width: 30mm;
+  }
+</style>
