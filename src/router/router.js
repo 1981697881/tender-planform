@@ -6,17 +6,17 @@ const map = {
   Layout: () => import('@/layout'),
   error: () => import('@/views/404'),
   '/basic': () => import('@/layout'),
-  'commodity': () => import('@/views/basic/commodity'),
-  'agent': () => import('@/views/basic/agent'),
   'clerk': () => import('@/views/basic/clerk'),
-  'store': () => import('@/views/basic/store'),
 
   'qualifications': () => import('@/views/preBid/qualifications'),
   'scoringCriteria': () => import('@/views/preBid/scoringCriteria'),
   'extract': () => import('@/views/preBid/extract'),
 
   'project': () => import('@/views/extension/project'),
-  'expert': () => import('@/views/distribution/expert'),
+  'expert': () => import('@/views/basic/expert'),
+  'procure': () => import('@/views/basic/procure'),
+  'srm': () => import('@/views/basic/srm'),
+  'fileTemplate': () => import('@/views/basic/fileTemplate'),
 
   'notice': () => import('@/views/business/notice'),
 
@@ -34,7 +34,6 @@ const map = {
   'AnnulmentAnnouncement': () => import('@/views/winningTheBid/annulmentAnnouncement'),
   'return': () => import('@/views/winningTheBid/return'),
 
-  'procure': () => import('@/views/purchase/procure'),
   'users': () => import('@/views/system/users'),
   'department': () => import('@/views/system/department'),
   'about': () => import('@/views/system/about')

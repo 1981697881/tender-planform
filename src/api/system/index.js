@@ -225,3 +225,13 @@ export function addAbout(params) {
     data: params
   })
 }
+// 权限按钮-查找
+export function getByUserAndPrId(params) {
+  return request({
+    url: '/sys-menu/getByUserAndPrId/' + params,
+    headers: {
+      'authorization': getToken('tenderrx')
+    },
+    method: 'get'
+  })
+}

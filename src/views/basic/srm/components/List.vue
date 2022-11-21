@@ -13,11 +13,9 @@
 
   </div>
 </template>
-
-<script>import {mapGetters} from 'vuex'
-import {getProjectInitiationList, deleteProjectInitiation} from '@/api/extension/index'
-import List from '@/components/List'
-
+<script>import {mapGetters} from 'vuex';
+import {getSupplierList, deleteSupplier} from '@/api/supplier/index';
+import List from '@/components/List';
 export default {
   components: {
     List
@@ -30,11 +28,13 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text: '档案号', name: 'filingNo' },
-        { text: '项目编号', name: 'pojectNo' },
-        { text: '项目名称', name: 'projectName' },
+        {text: '供应商名称', name: 'supplierName'},
+        {text: '联系地址', name: 'supplierAddress'},
+        {text: '联系人', name: 'contacts'},
+        {text: '联系电话', name: 'contactNumber'},
+        {text: '供应商账号', name: 'supplierAccountNumber'},
       ]
-    }
+    };
   },
   methods: {
     // 监听每页显示几条
@@ -51,7 +51,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteProjectInitiation([val]).then(res => {
+      deleteSupplier([val]).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '');
           this.$emit('uploadList')
@@ -73,13 +73,13 @@ export default {
       pageSize: this.list.size || 50
     }) {
       this.loading = true;
-      getProjectInitiationList(data, val).then(res => {
+      getSupplierList(data, val).then(res => {
         this.loading = false;
         this.list = res.data;
       });
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

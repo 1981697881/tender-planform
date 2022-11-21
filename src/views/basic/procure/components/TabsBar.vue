@@ -12,54 +12,55 @@
         </el-col>
         <el-button-group style="float:right">
           <el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>
-          <!--<el-button :size="'mini'" type="primary" icon="el-icon-folder-opened" @click="sending">发送邮件</el-button>-->
-          <!--<el-button :size="'mini'" type="primary" icon="el-icon-search" @click="handlerAlter">查看</el-button>-->
+          <!--<el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="handlerAlter">修改</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="partake">查看项目</el-button>-->
+         <!-- <el-button :size="'mini'" type="primary" icon="el-icon-error" @click="disable" >禁用</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-success" @click="enable" >启用</el-button>-->
           <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
         </el-button-group>
       </el-row>
     </el-form>
-
   </div>
 </template>
-<script>import {mapGetters} from 'vuex'
-import {alterClerk} from '@/api/basic/index'
-import {getByUserAndPrId} from '@/api/system/index'
-
+<script>
+import { mapGetters } from 'vuex'
+import { alterClerk } from '@/api/basic/index'
+import { getByUserAndPrId } from '@/api/system/index'
 export default {
   components: {},
   computed: {
-    ...mapGetters(['node', 'clickData', 'selections'])
+    ...mapGetters(['node','clickData','selections'])
   },
   data() {
     return {
       btnList: [],
-      checkList: [],
-      visible: null,
       search: {
         name: null
       }
     };
   },
   mounted() {
-     let path = this.$route.meta.id
-     getByUserAndPrId(path).then(res => {
-       this.btnList = res.data
-       this.$forceUpdate();
-     });
+    let path = this.$route.meta.id
+    getByUserAndPrId(path).then(res => {
+      this.btnList = res.data
+      this.$forceUpdate();
+    });
   },
   methods: {
-    onFun(method) {
+    onFun(method){
       this[method]()
     },
     Delivery() {
       if (this.clickData.id) {
-        this.$confirm('是否删除（' + this.clickData.name + '），删除后将无法恢复?', '提示', {
+        this.$confirm('是否删除（' + this.clickData.companyName + '），删除后将无法恢复?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.$emit('delList', {
-            eid: this.clickData.eid
+            id: this.clickData.id
           })
         }).catch(() => {
           this.$message({
@@ -75,7 +76,7 @@ export default {
       }
     },
     handlerAlter() {
-      if (this.clickData.id) {
+      if (this.clickData.eid) {
         this.$emit('showDialog', this.clickData)
       } else {
         this.$message({
@@ -84,9 +85,9 @@ export default {
         })
       }
     },
-    sending() {
+    partake() {
       if (this.clickData.id) {
-        this.visible = true
+        this.$emit('showListDialog', this.clickData)
       } else {
         this.$message({
           message: '无选中行',
@@ -94,16 +95,11 @@ export default {
         })
       }
     },
-    confirm() {
-      this.checkList.forEach((item, index) => {
-
-      })
-    },
     disable() {
-      if (this.clickData.id) {
+      if (this.clickData.eid) {
         this.clickData.disable = true
         alterClerk(this.clickData).then(res => {
-          if (res.flag) {
+          if(res.flag) {
             this.$emit('uploadList')
           }
         });
@@ -115,10 +111,10 @@ export default {
       }
     },
     enable() {
-      if (this.clickData.id) {
+      if (this.clickData.eid) {
         this.clickData.disable = false
         alterClerk(this.clickData).then(res => {
-          if (res.flag) {
+          if(res.flag){
             this.$emit('uploadList')
           }
         })
@@ -139,10 +135,10 @@ export default {
     // 查询条件过滤
     qFilter() {
       let obj = {}
-      this.search.name != null && this.search.name != '' ? obj.projectName = this.search.name : null
+      this.search.name != null && this.search.name != '' ? obj.name = this.search.name : null
       return obj
     },
-    handleAdd() {
+    handleAdd(){
       this.$emit('showDialog')
     }
   }

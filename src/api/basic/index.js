@@ -26,8 +26,32 @@ export function getClerkList(params, query) {
     method: 'POST',
     data: query
   })
+}// 文件-获取列表
+export function getFileList(params, query) {
+  const url = '/uploadFile/uploadFilePage/' + params.pageNum + '/' + params.pageSize
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('tenderrx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: query
+  })
 }
-
+// 文件-删除
+export function deleteUploadFile(params) {
+  const url = '/uploadFile/deleteUploadFile'
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('tenderrx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    data: params
+  })
+}
 // 职员管理-新增
 export function addClerk(params) {
   return request({

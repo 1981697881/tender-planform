@@ -15,7 +15,7 @@
 </template>
 
 <script>import {mapGetters} from 'vuex'
-import {getProjectInitiationList, deleteProjectInitiation} from '@/api/extension/index'
+import {getMajorList, deleteMajor} from '@/api/distribution/index'
 import List from '@/components/List'
 
 export default {
@@ -30,9 +30,14 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text: '档案号', name: 'filingNo' },
-        { text: '项目编号', name: 'pojectNo' },
-        { text: '项目名称', name: 'projectName' },
+        { text: '专家姓名', name: 'expertName' },
+        { text: '性别', name: 'sex' },
+        { text: '单位', name: 'workUnit' },
+        { text: '身份证号码', name: 'idcardNo' },
+        { text: '手机号码', name: 'mobilePhone' },
+        { text: '职称', name: 'job' },
+        /*{ text: '星级', name: 'star' },
+        { text: '是否待抽取状态', name: 'status' }*/
       ]
     }
   },
@@ -51,7 +56,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteProjectInitiation([val]).then(res => {
+      deleteMajor([val]).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '');
           this.$emit('uploadList')
@@ -73,13 +78,13 @@ export default {
       pageSize: this.list.size || 50
     }) {
       this.loading = true;
-      getProjectInitiationList(data, val).then(res => {
+      getMajorList(data, val).then(res => {
         this.loading = false;
         this.list = res.data;
       });
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

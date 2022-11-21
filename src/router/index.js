@@ -188,7 +188,7 @@ export const StaticRouterMap = [{
       }
     },
   ]
-},*/ {
+}, {
   path: '/documentation',
   component: Layout,
   name: 'Documentation',
@@ -205,20 +205,41 @@ export const StaticRouterMap = [{
     }
   }]
 }, {
-  path: '/distribution',
+  path: '/basic',
   component: Layout,
-  name: 'Distribution',
+  name: 'Basic',
   meta: {
-    title: '专家库管理',
+    title: '基础资料',
     icon: 'component'
   },
   children: [
     {
       path: 'expert',
-      component: () => import('@/views/distribution/expert/index'),
+      component: () => import('@/views/basic/expert/index'),
       name: 'Expert',
       meta: {
         title: '专家信息'
+      }
+    },{
+      path: 'srm',
+      component: () => import('@/views/basic/srm/index'),
+      name: 'Srm',
+      meta: {
+        title: '供应商管理'
+      }
+    },{
+      path: 'procure',
+      component: () => import('@/views/basic/procure/index'),
+      name: 'Procure',
+      meta: {
+        title: '采购单位管理'
+      }
+    }, {
+      path: 'fileTemplate',
+      component: () => import('@/views/basic/fileTemplate/index'),
+      name: 'FileTemplate',
+      meta: {
+        title: '采购文件模板'
       }
     }]
 }, {
@@ -255,7 +276,7 @@ export const StaticRouterMap = [{
     }
   }
   ]
-}, /*{
+}, {
   path: '/dataReport',
   component: Layout,
   name: 'DataReport',
@@ -272,7 +293,7 @@ export const StaticRouterMap = [{
         title: '项目季度统计'
       }
     }]
-}, */{
+}, {
   path: '/system',
   component: Layout,
   name: 'System',
@@ -294,15 +315,15 @@ export const StaticRouterMap = [{
     meta: {
       title: '部门管理'
     }
-  }/*, {
+  }, {
     path: 'about',
     component: () => import('@/views/system/about/index'),
     name: 'About',
     meta: {
       title: '用户协议'
     }
-  }*/]
-}
+  ]
+}}*/
   /* {
     path: 'external-link',
     component: Layout,

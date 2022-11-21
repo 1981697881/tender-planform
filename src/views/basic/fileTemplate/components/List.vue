@@ -14,10 +14,9 @@
   </div>
 </template>
 
-<script>import {mapGetters} from 'vuex'
-import {getProjectInitiationList, deleteProjectInitiation} from '@/api/extension/index'
-import List from '@/components/List'
-
+<script>import {mapGetters} from 'vuex';
+import {getFileList, deleteUploadFile} from '@/api/basic/index';
+import List from '@/components/List';
 export default {
   components: {
     List
@@ -30,11 +29,12 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text: '档案号', name: 'filingNo' },
-        { text: '项目编号', name: 'pojectNo' },
-        { text: '项目名称', name: 'projectName' },
+        {text: '文件名称', name: 'fileName'},
+        {text: '文件大小', name: 'fileSize'},
+        {text: '上传人', name: 'uploadPeople'},
+        {text: '上传时间', name: 'createDate'}
       ]
-    }
+    };
   },
   methods: {
     // 监听每页显示几条
@@ -51,7 +51,7 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteProjectInitiation([val]).then(res => {
+      deleteUploadFile([val]).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '');
           this.$emit('uploadList')
@@ -73,13 +73,13 @@ export default {
       pageSize: this.list.size || 50
     }) {
       this.loading = true;
-      getProjectInitiationList(data, val).then(res => {
+      getFileList(data, val).then(res => {
         this.loading = false;
         this.list = res.data;
       });
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

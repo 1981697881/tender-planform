@@ -22,10 +22,10 @@
           <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="query">查询</el-button>
         </el-col>
         <el-button-group style="float:right">
-          <!--  <el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>-->
-          <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="alter">修改</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>
+            <el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>
+         <!-- <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="handlerAlter">修改</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>-->
           <!--<el-popover
             placement="left"
             width="400"
@@ -52,9 +52,9 @@
             </el-button>
           </el-popover>-->
          <!-- <el-button :size="'mini'" type="primary" icon="el-icon-download" @click="download(1)">采购文件下载</el-button>-->
-          <el-button :size="'mini'" type="primary" icon="el-icon-download" @click="download(2)">采购文件模板下载</el-button>
+        <!--  <el-button :size="'mini'" type="primary" icon="el-icon-download" @click="download(2)">采购文件模板下载</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-upload2" @click="uploadFile">招标文件</el-button>
-          <el-button :size="'mini'" type="primary" icon="el-icon-download" @click="exportScan">导出二维码</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-download" @click="exportScan">导出二维码</el-button>-->
           <!--<el-button :size="'mini'" type="primary" icon="el-icon-view" @click="handleAudit">审核</el-button>-->
         <!--  <el-dropdown @command="handlerBtn" trigger="click">
             <el-button :size="'mini'" type="primary">
@@ -89,10 +89,7 @@
         </el-row>
         <el-row :span="20" v-else>
           <el-radio-group v-model="radio">
-            <el-radio style="width: 100%" label="招标文件-报折扣率.doc">招标文件-报折扣率.doc</el-radio>
-            <el-radio style="width: 100%" label="招标文件-报总价（服务类）.doc">招标文件-报总价（服务类）.doc</el-radio>
-            <el-radio style="width: 100%" label="招标文件-报总价（货物类）.doc">招标文件-报总价（货物类）.doc</el-radio>
-            <el-radio style="width: 100%" label="竞争性磋商文件.doc">竞争性磋商文件.doc</el-radio>
+            <el-radio style="width: 100%" v-for="(item,index) in fileList" :key="index" :label="item.fileName">{{item.fileName}}</el-radio>
           </el-radio-group>
         </el-row>
       </el-form>
@@ -103,7 +100,7 @@
   </div>
 </template>
 <script>import {mapGetters} from 'vuex'
-import {alterClerk, downloadFile} from '@/api/basic/index'
+import {alterClerk, downloadFile, getFileList} from '@/api/basic/index'
 import {getByUserAndPrId, getUsersList} from '@/api/system/index'
 import {addProjectInitiation, projectAudit,projectAuditNo} from '@/api/extension/index'
 import fileDownload from 'js-file-download'
@@ -122,6 +119,7 @@ export default {
     return {
       user: null,
       btnList: [],
+      fileList: [],
       checkList: [],
       levelFormat: [],
       radio: 0,
@@ -144,10 +142,10 @@ export default {
   },
   mounted() {
     let path = this.$route.meta.id
-    /* getByUserAndPrId(path).then(res => {
+     getByUserAndPrId(path).then(res => {
        this.btnList = res.data
        this.$forceUpdate();
-     });*/
+     });
     this.fetchFormat()
   },
   methods: {
@@ -278,6 +276,7 @@ export default {
       } else {
         this.visible = true
       }
+      this.getFileList()
     },
     onSubmit() {
       /*if (this.selections.length > 0) {
@@ -326,7 +325,7 @@ export default {
     onFun(method) {
       this[method]()
     },
-    fetchFormat(val) {
+    fetchFormat(val ={}) {
       const data = {
         pageNum: 1,
         pageSize: 10
@@ -335,6 +334,18 @@ export default {
         if (res.flag) {
           this.loading = false;
           this.levelFormat = res.data.records
+        }
+      });
+    },
+    getFileList(val = {}) {
+      const data = {
+        pageNum: 1,
+        pageSize: 1000
+      };
+      getFileList(data, val).then(res => {
+        if (res.flag) {
+          this.loading = false;
+          this.fileList = res.data.records
         }
       });
     },
@@ -379,7 +390,7 @@ export default {
         })
       }
     },
-    alter() {
+    handlerAlter() {
       if (this.clickData.id) {
         this.$emit('showDialog', this.clickData)
       } else {

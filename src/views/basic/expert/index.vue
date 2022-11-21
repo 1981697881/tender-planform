@@ -3,9 +3,9 @@
     <!--<Tree class="list-tree" @handler-node="handlerNode" />-->
     <div class="list-containerOther">
       <div>
-        <tabs-bar ref="tabs" @showDialog="handlerDialog" @delList="delivery" @uploadList="upload" @queryBtn="query"/>
+        <tabs-bar ref="tabs" @showDialog="handlerDialog" @showListDialog="handlerListDialog" @delList="delivery"  @queryBtn="query" @uploadList="upload"/>
       </div>
-      <list ref="list"  @uploadList="uploadPage"  @showDialog="handlerDialog"/>
+      <list ref="list"  @showDialog="handlerDialog" @uploadList="uploadPage"/>
     </div>
 
     <el-dialog
@@ -17,28 +17,36 @@
       destroy-on-close
     >
       <info @hideDialog="hideWindow" @uploadList="upload" :listInfo="listInfo"></info>
-
+    </el-dialog>
+    <el-dialog
+      :visible.sync="visible2"
+      title="参与项目"
+      v-if="visible2"
+      v-dialogDrag
+      :width="'50%'"
+      destroy-on-close
+    >
+      <list-info @hideDialog="hideWindow" @uploadList="upload" :listInfo="listInfo"></list-info>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { TabsBar, List } from "./components";
-import { Info } from "./form";
+import { Info,ListInfo } from "./form";
 
 export default {
   components: {
     TabsBar,
     List,
-    Info
+    Info,
+    ListInfo
   },
   data() {
     return {
       visible: null,
-      oid: null,
-      listInfo: null,
-      treeId: null, // null
-      floorId: null
+      visible2: null,
+      listInfo: null
     };
   },
   mounted() {
@@ -50,8 +58,13 @@ export default {
         this.$refs.list.Delivery(obj)
       }
     },
+    // 弹窗拖拽
+    handleDrag() {
+      this.$refs.select.blur();
+    },
     hideWindow(val) {
       this.visible = val
+      this.visible2 = val
     },
     handlerDialog(obj) {
       this.listInfo = null
@@ -61,17 +74,26 @@ export default {
       }
       this.visible = true
     },
-    // 更新列表
-    upload() {
-      this.$refs.list.uploadPr(this.$refs.tabs.qFilter())
-    },
-    uploadPage(val) {
-      this.$refs.list.fetchData(this.$refs.tabs.qFilter())
+    handlerListDialog(obj) {
+      this.listInfo = null
+      if(obj) {
+        const info = JSON.parse(JSON.stringify(obj))
+        this.listInfo = info
+      }
+      this.visible2 = true
     },
     // 查询
     query() {
-      this.$refs.list.uploadPr(this.$refs.tabs.qFilter())
+      this.$refs.list.fetchData(this.$refs.tabs.qFilter())
     },
+    // 查询
+    uploadPage(val) {
+      this.$refs.list.fetchData(this.$refs.tabs.qFilter())
+    },
+    // 更新列表
+    upload(){
+      this.$refs.list.uploadPr(this.$refs.tabs.qFilter())
+    }
   }
 };
 </script>
