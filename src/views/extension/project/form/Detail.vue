@@ -300,7 +300,7 @@
       :visible.sync="visible"
       title="子采购包"
       v-if="visible"
-      :width="'50%'"
+      :width="'40%'"
       destroy-on-close
       append-to-body
     >
@@ -315,7 +315,7 @@
         <el-row :span="20">
           <el-col :span="12" :offset="4">
             <el-form-item :label="'单价（元）'">
-              <el-input-number style="width: auto" v-model="postForm.univalent" :min="1"></el-input-number>
+              <el-input-number style="width: 100%" v-model="postForm.univalent" :min="1"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -342,7 +342,7 @@
         <el-row :span="20">
           <el-col :span="12" :offset="4">
             <el-form-item :label="'数量'">
-              <el-input-number style="width: auto" v-model="postForm.quantity" :min="1"></el-input-number>
+              <el-input-number  style="width: 100%" v-model="postForm.quantity" :min="1"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -374,14 +374,14 @@
         <el-row :span="20" v-if="form.bond == '1'">
           <el-col :span="12" :offset="4">
             <el-form-item :label="'保证金（元）'">
-              <el-input-number style="width: auto" :precision="0" :min="0" v-model="postForm.bond"></el-input-number>
+              <el-input-number style="width: 100%" :precision="0" :min="0" v-model="postForm.bond"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :span="20">
           <el-col :span="12" :offset="4">
             <el-form-item :label="'代理服务费（元）'">
-              <el-input-number style="width: auto" v-model="postForm.agencyFee" :min="0"></el-input-number>
+              <el-input-number style="width: 100%" v-model="postForm.agencyFee" :min="0"></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -849,10 +849,7 @@ export default {
       columns: [
         {text: '采购包名称', name: 'packageName'},
         {text: '供应商', name: 'supplierName'},
-        {text: '计量单位', name: 'unitOfMeasurement'},
-        {text: '单价（元）', name: 'univalent'},
-        {text: '数量', name: 'quantity'},
-        {text: '小计（元）', name: 'subtotal'},
+        {text: '预算金额（元）', name: 'subtotal'},
         {text: '代理服务费（元）', name: 'agencyFee'},
         {text: '保证金（元）', name: 'bond'}
       ],

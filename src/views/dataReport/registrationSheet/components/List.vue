@@ -31,15 +31,35 @@ export default {
       loading: false,
       list: {},
       columns: [
-        {text: '小程序票劵号', name: 'ticketId'},
-        {text: '订单号', name: 'bookingId'},
-        {text: '影片名称', name: 'filmName'},
-        {text: '手机号码', name: 'mobile'},
-        {text: '取票号', name: 'confirmationId'},
-        {text: '实际支付金额', name: 'ticketPaymoney'},
-        {text: '票劵总价', name: 'remark'},
-        {text: '购买时间', name: 'createDatetime', sort: true},
-        {text: '支付方式', name: 'payType', sort: true}
+        {text: '档案号', name: ''},
+        {text: '安排时间', name: ''},
+        {text: '采购方式', name: ''},
+        {text: '业务员', name: ''},
+        {text: '系统', name: ''},
+        {text: '采购单位', name: ''},
+        {text: '项目名称', name: ''},
+        {text: '项目编号', name: ''},
+        {text: '编写', name: ''},
+        {text: '审核', name: ''},
+        {text: '项目进度', name: ''},
+        {text: '报名单位数量', name: ''},
+        {text: '文件开标日期', name: ''},
+        {text: '实际开标日期', name: ''},
+        {text: '业务员确认日期', name: ''},
+        {text: '预算金额(万元)', name: ''},
+        {text: '中标金额(万元)', name: ''},
+        {text: '中标单位', name: ''},
+        {text: '中标服务费', name: ''},
+        {text: '付款方', name: ''},
+        {text: '缴费时间', name: ''},
+        {text: '缴费方式', name: ''},
+        {text: '开发票时间', name: ''},
+        {text: '发票号', name: ''},
+        {text: '资料寄送', name: ''},
+        {text: '服务年限', name: ''},
+        {text: '推算服务器结束', name: ''},
+        {text: '结转情况', name: ''},
+        {text: '备注', name: ''}
       ]
     };
   },
@@ -61,7 +81,7 @@ export default {
         excel.exportJsonToExcel({
           header: tHeader,
           data: data,
-          filename: '人事报表',
+          filename: '报表',
           autoWidth: true,
           bookType: 'xlsx'})
       })
@@ -108,11 +128,11 @@ export default {
       pageNum: this.list.current || 1,
       pageSize: this.list.size || 50
     }) {
-      this.loading = true
+      /*this.loading = true
       getTicketList(data, val).then(res => {
         this.loading = false
         this.list = res.data
-      });
+      });*/
     }
   }
 };

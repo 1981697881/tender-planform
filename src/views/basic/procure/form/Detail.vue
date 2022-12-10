@@ -10,12 +10,12 @@
         <el-col :span="12">
           <el-form-item :label="'注册时间'" prop="registrationDate">
             <el-date-picker
-              v-model="form.registrationDate"
-              type="date"
-              format="yyyy 年 MM 月 dd 日"
-              value-format="yyyy-MM-dd"
-              placeholder="选择日期">
-            </el-date-picker>
+            v-model="form.registrationDate"
+            type="date"
+            format="yyyy 年 MM 月 dd 日"
+            value-format="yyyy-MM-dd"
+            placeholder="选择日期">
+          </el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>

@@ -26,6 +26,8 @@ const map = {
   'rosca': () => import('@/views/bidEvaluation/rosca'),
 
   'agentSalesSummary': () => import('@/views/dataReport/agentSalesSummary'),
+  'registrationSheet': () => import('@/views/dataReport/registrationSheet'),
+  'summary': () => import('@/views/dataReport/summary'),
   'projectArchive': () => import('@/views/documentation/projectArchive'),
 
   'winTheBidding': () => import('@/views/winningTheBid/winTheBidding'),

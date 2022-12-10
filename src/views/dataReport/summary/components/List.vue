@@ -16,7 +16,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getTicketList } from '@/api/basic/index'
+import { getSupplierList } from '@/api/supplier/index'
 import List from '@/components/List'
 
 export default {
@@ -31,15 +31,14 @@ export default {
       loading: false,
       list: {},
       columns: [
-        {text: '小程序票劵号', name: 'ticketId'},
-        {text: '订单号', name: 'bookingId'},
-        {text: '影片名称', name: 'filmName'},
-        {text: '手机号码', name: 'mobile'},
-        {text: '取票号', name: 'confirmationId'},
-        {text: '实际支付金额', name: 'ticketPaymoney'},
-        {text: '票劵总价', name: 'remark'},
-        {text: '购买时间', name: 'createDatetime', sort: true},
-        {text: '支付方式', name: 'payType', sort: true}
+        {text: '系统', name: ''},
+        {text: '业务员', name: 'supplierName'},
+        {text: '项目名称', name: ''},
+        {text: '项目编号', name: ''},
+        {text: '预算金额', name: ''},
+        {text: '代理服务费', name: ''},
+        {text: '开标日期', name: ''},
+        {text: '缴费时间', name: '', sort: true},
       ]
     };
   },
@@ -109,7 +108,7 @@ export default {
       pageSize: this.list.size || 50
     }) {
       this.loading = true
-      getTicketList(data, val).then(res => {
+      getSupplierList(data, val).then(res => {
         this.loading = false
         this.list = res.data
       });
