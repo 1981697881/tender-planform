@@ -687,6 +687,7 @@ export default {
         ifPersonal: '0',
         budgetAmount: '1',
         projectLeader: null,
+        bidwinningAmount: null,
         filingNo: null,
         fillingDate: null,
         pojectType: null,

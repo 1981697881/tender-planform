@@ -20,6 +20,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 import Cookies from 'js-cookie'
+
 import {login,logout} from '@/api/user'
 import '@/utils/dialog'
 import VideoPlayer from 'vue-video-player'

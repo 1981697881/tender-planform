@@ -16,7 +16,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getSupplierList } from '@/api/supplier/index'
+import {getProjectInitiationList} from '@/api/extension/index'
 import List from '@/components/List'
 
 export default {
@@ -31,14 +31,14 @@ export default {
       loading: false,
       list: {},
       columns: [
-        {text: '系统', name: ''},
-        {text: '业务员', name: 'supplierName'},
-        {text: '项目名称', name: ''},
-        {text: '项目编号', name: ''},
-        {text: '预算金额', name: ''},
-        {text: '代理服务费', name: ''},
-        {text: '开标日期', name: ''},
-        {text: '缴费时间', name: '', sort: true},
+        {text: '系统', name: 'proSystem'},
+        {text: '业务员', name: 'projectLeader'},
+        {text: '项目名称', name: 'projectName'},
+        {text: '项目编号', name: 'pojectNo'},
+        {text: '预算金额', name: 'budgetAmount'},
+        {text: '代理服务费', name: 'serviceFee'},
+        {text: '开标日期', name: 'openMarkdate'},
+        {text: '缴费时间', name: 'paymentTime', sort: true},
       ]
     };
   },
@@ -60,7 +60,7 @@ export default {
         excel.exportJsonToExcel({
           header: tHeader,
           data: data,
-          filename: '人事报表',
+          filename: '汇总表',
           autoWidth: true,
           bookType: 'xlsx'})
       })
@@ -108,7 +108,7 @@ export default {
       pageSize: this.list.size || 50
     }) {
       this.loading = true
-      getSupplierList(data, val).then(res => {
+      getProjectInitiationList(data, val).then(res => {
         this.loading = false
         this.list = res.data
       });

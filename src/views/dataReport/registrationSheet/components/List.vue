@@ -16,7 +16,7 @@
 </template>
 
 <script>import { mapGetters } from 'vuex'
-import { getTicketList } from '@/api/basic/index'
+import {getProjectInitiationList} from '@/api/extension/index'
 import List from '@/components/List'
 
 export default {
@@ -31,34 +31,34 @@ export default {
       loading: false,
       list: {},
       columns: [
-        {text: '档案号', name: ''},
-        {text: '安排时间', name: ''},
-        {text: '采购方式', name: ''},
-        {text: '业务员', name: ''},
-        {text: '系统', name: ''},
-        {text: '采购单位', name: ''},
-        {text: '项目名称', name: ''},
-        {text: '项目编号', name: ''},
-        {text: '编写', name: ''},
-        {text: '审核', name: ''},
-        {text: '项目进度', name: ''},
+        {text: '档案号', name: 'filingNo'},
+        {text: '安排时间', name: 'openMarkdate'},
+        {text: '采购方式', name: 'procurementMethod'},
+        {text: '业务员', name: 'projectLeader'},
+        {text: '系统', name: 'proSystem'},
+        {text: '采购单位', name: 'buyingUnit'},
+        {text: '项目名称', name: 'projectName'},
+        {text: '项目编号', name: 'pojectNo'},
+        {text: '编写', name: 'compile'},
+        {text: '审核', name: 'proExamine'},
+        {text: '项目进度', name: 'proPlan'},
         {text: '报名单位数量', name: ''},
         {text: '文件开标日期', name: ''},
-        {text: '实际开标日期', name: ''},
-        {text: '业务员确认日期', name: ''},
-        {text: '预算金额(万元)', name: ''},
-        {text: '中标金额(万元)', name: ''},
+        {text: '实际开标日期', name: 'openMarkdate'},
+        {text: '业务员确认日期', name: 'fillingDate'},
+        {text: '预算金额(万元)', name: 'budgetAmount'},
+        {text: '中标金额(万元)', name: 'bidwinningAmount'},
         {text: '中标单位', name: ''},
-        {text: '中标服务费', name: ''},
-        {text: '付款方', name: ''},
-        {text: '缴费时间', name: ''},
-        {text: '缴费方式', name: ''},
-        {text: '开发票时间', name: ''},
-        {text: '发票号', name: ''},
-        {text: '资料寄送', name: ''},
-        {text: '服务年限', name: ''},
+        {text: '中标服务费', name: 'serviceFee'},
+        {text: '付款方', name: 'payer'},
+        {text: '缴费时间', name: 'paymentTime'},
+        {text: '缴费方式', name: 'paymentType'},
+        {text: '开发票时间', name: 'invoicingTime'},
+        {text: '发票号', name: 'invoicingNo'},
+        {text: '资料寄送', name: 'sendData'},
+        {text: '服务年限', name: 'serviceLife'},
         {text: '推算服务器结束', name: ''},
-        {text: '结转情况', name: ''},
+        {text: '结转情况', name: 'carryForward'},
         {text: '备注', name: ''}
       ]
     };
@@ -81,7 +81,7 @@ export default {
         excel.exportJsonToExcel({
           header: tHeader,
           data: data,
-          filename: '报表',
+          filename: '登记表',
           autoWidth: true,
           bookType: 'xlsx'})
       })
@@ -128,11 +128,11 @@ export default {
       pageNum: this.list.current || 1,
       pageSize: this.list.size || 50
     }) {
-      /*this.loading = true
-      getTicketList(data, val).then(res => {
+      this.loading = true
+      getProjectInitiationList(data, val).then(res => {
         this.loading = false
         this.list = res.data
-      });*/
+      });
     }
   }
 };

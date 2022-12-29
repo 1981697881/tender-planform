@@ -11,7 +11,7 @@
 
     <panel-group @handleSetLineChartData="handleSetLineChartData" />-->
 
-    <el-row :gutter="32">
+    <!--<el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
           <raddar-chart />
@@ -27,9 +27,9 @@
           <bar-chart />
         </div>
       </el-col>
-    </el-row>
+    </el-row>-->
     <el-row :gutter="32">
-      <el-calendar>
+      <el-calendar v-model="month">
         <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
         <template
           slot="dateCell"
@@ -37,13 +37,13 @@
           <!-- 这里加了周六周天的判断 -->
           <div class="weeked">{{data.day}}</div>
           <!-- 数组循环 -->
-          <div class="cell" v-for="(item,index) in tableData" @click="clickDate(item)">
+          <div class="cell" v-for="(item,index) in tableData" @click.stop="clickDate(item)">
             <!-- 加数据 -->
             <div v-if="data.day == item.day">
               <div v-for="(it,iIndex) in tableData[index].info">
                 <div class="info text-center">
                   <i class="el-icon-info"></i>
-                  <b>{{it.name}} </b>
+                  <b>{{it.projectName}} </b>
                 </div>
               </div>
             </div>
@@ -66,6 +66,30 @@
         <todo-list :placeholder="'公告通知'" />
       </el-col>
     </el-row>-->
+    <el-dialog
+      :visible.sync="visible"
+      title="维护资料"
+      v-if="visible"
+      :width="'50%'"
+      destroy-on-close
+      append-to-body
+    >
+      <el-form label-width="130px" :size="'mini'">
+        <el-row :gutter="20">
+          <el-table class="list-main" height="300px" :data="list" border size="mini" :highlight-current-row="true">
+            <el-table-column
+              v-for="(t,i) in columns"
+              :key="i"
+              align="center"
+              :prop="t.name"
+              :label="t.text"
+              v-if="t.default!=undefined?t.default:true"
+              :width="t.width?t.width:''"
+            ></el-table-column>
+          </el-table>
+        </el-row>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -81,7 +105,8 @@ import PieChart from './components/PieChart'
 import BarChart from './components/BarChart'
 import TodoList from './components/TodoList'
 import { mainReport } from '@/api/system/index'
-
+import {getProjectInitiationList} from '@/api/extension/index'
+import moment from "moment";
 const lineChartData = {
   newVisitis: {
     expectedData: [100, 120, 161, 134, 105, 160, 165],
@@ -120,27 +145,95 @@ export default {
   data() {
     return {
       loading: false,
+      visible: false,
+      list: [],
+      columns: [
+        { text: '项目名称', name: 'projectName' },
+        { text: '项目编号', name: 'pojectNo' }
+      ],
+      month: moment().format('YYYY-MM'),
       tableData: [
-        {
-          day:'2022-11-01',
+        /*{
+          day:'2022-12-01',
           info:[
             {
               all:'all2',
               name: '1',
             },
           ],
-        },
-
+        },*/
       ],
       lineChartData: lineChartData.newVisitis
     }
   },
-  mounted() {
+  watch: {
+    month: function (newVal,oldVal) {
 
+    },
+  },
+  created: function() {
+    this.$nextTick(() => {
+      // 点击前一个月
+      let prevBtn = document.querySelector(
+        ".el-calendar__button-group .el-button-group>button:nth-child(1)"
+      );
+      prevBtn.addEventListener("click", e => {
+        this.fetchDateData({openMarkdate: moment(this.month).format('YYYY-MM')})
+
+      });
+
+      //点击下一个月
+      let nextBtn = document.querySelector(
+        ".el-calendar__button-group .el-button-group>button:nth-child(3)"
+      );
+      nextBtn.addEventListener("click", () => {
+        this.fetchDateData({openMarkdate: moment(this.month).format('YYYY-MM')})
+
+      });
+
+      //点击今天
+      let todayBtn = document.querySelector(
+        ".el-calendar__button-group .el-button-group>button:nth-child(2)"
+      );
+      todayBtn.addEventListener("click", () => {
+        this.fetchDateData({openMarkdate: moment(this.month).format('YYYY-MM')})
+
+      });
+    });
+  },
+  mounted() {
+    this.fetchDateData({openMarkdate: this.month})
   },
   methods: {
     clickDate(val){
+      this.visible= true
       console.log(val)
+      this.list = val.info
+    },
+    fetchDateData(val={openMarkdate: this.month}, data = {
+      pageNum:  1,
+      pageSize: 50
+    }) {
+      getProjectInitiationList(data, val).then(res => {
+        if(res.flag){
+          this.tableData = []
+            res.data.records.forEach((item,index)=>{
+              let number = 0
+              if(this.tableData.length>0){
+                this.tableData.forEach((date)=>{
+                  if(date.day == item.fillingDate){
+                    date.info.push(item)
+                    number++;
+                  }
+                })
+              }
+              if(number==0){
+                this.tableData.push({day: item.openMarkdate.substring(0,10),info: [item]})
+              }
+            })
+          console.log(this.tableData)
+        }
+      });
     },
     getDaysBetween(dateString1,dateString2){
       let dateStart = Date.parse(dateString1);
