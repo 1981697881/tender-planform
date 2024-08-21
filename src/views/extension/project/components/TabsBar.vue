@@ -435,6 +435,7 @@ export default {
     },
     upload() {
       this.search.name = ''
+      this.$store.dispatch('list/setClickData', '')
       this.$emit('uploadList')
     },
     // 查询条件过滤

@@ -37,7 +37,7 @@ module.exports = {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
-        //target: `http://gzfzdev.com/`, // 修改后台接口地址
+        //target: `http://exportJsonToExcel.com/`, // 修改后台接口地址
         target: `http://14.29.254.232:50025/tenderings`,
         //target: `http://test.gzfzdev.com:10015/`,
         //changeOrigin: true, // 必须加上跨域

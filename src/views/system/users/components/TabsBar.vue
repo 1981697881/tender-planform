@@ -108,6 +108,7 @@ export default {
       }
     },
     upload() {
+      this.$store.dispatch('list/setClickData', '')
       this.$emit('uploadAll')
     },
     disable() {

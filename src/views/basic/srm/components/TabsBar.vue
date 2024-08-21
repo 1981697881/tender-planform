@@ -77,7 +77,7 @@ export default {
       }
     },
     handlerAlter() {
-      if (this.clickData.eid) {
+      if (this.clickData.id) {
         this.$emit('showDialog', this.clickData)
       } else {
         this.$message({
@@ -97,7 +97,7 @@ export default {
       }
     },
     disable() {
-      if (this.clickData.eid) {
+      if (this.clickData.id) {
         this.clickData.disable = true
         alterClerk(this.clickData).then(res => {
           if(res.flag) {
@@ -112,7 +112,7 @@ export default {
       }
     },
     enable() {
-      if (this.clickData.eid) {
+      if (this.clickData.id) {
         this.clickData.disable = false
         alterClerk(this.clickData).then(res => {
           if(res.flag){
@@ -131,6 +131,7 @@ export default {
     },
     upload() {
       this.search.name = ''
+      this.$store.dispatch('list/setClickData', '')
       this.$emit('uploadList')
     },
     // 查询条件过滤

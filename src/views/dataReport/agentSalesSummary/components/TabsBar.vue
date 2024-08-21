@@ -137,6 +137,7 @@ export default {
       this.$emit('showDialog')
     },
     upload() {
+      this.$store.dispatch('list/setClickData', '')
       this.search.keyWords = null
       this.$emit('uploadList')
     },

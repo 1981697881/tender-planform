@@ -86,6 +86,7 @@ export default {
       this.$emit('showDialog')
     },
     upload() {
+      this.$store.dispatch('list/setClickData', '')
       this.$emit('uploadList')
     },
     handlerAlter() {

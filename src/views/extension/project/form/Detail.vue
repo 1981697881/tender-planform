@@ -21,7 +21,9 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'采购方式'">
-            <el-input v-model="form.procurementMethod"></el-input>
+            <el-select v-model="form.procurementMethod" class="width-full"  placeholder="请选择">
+              <el-option :label="t.label" :value="t.value" v-for="(t,i) in wayArray" :key="i"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -72,8 +74,15 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="2">
+        <el-col :span="2" v-if="form.demonstration ==1">
           <el-button type="primary" @click="winBasic(1)" size="mini" icon="el-icon-edit"></el-button>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="'公司名称'">
+            <el-input v-model="form.companyName"></el-input>
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row :gutter="20">
@@ -106,83 +115,6 @@
             <el-input-number style="width: auto" v-model="form.budgetAmount" :min="1"></el-input-number>
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'中标金额(万元)'">
-            <el-input-number style="width: auto" v-model="form.bidwinningAmount" :min="1"></el-input-number>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="'开标时间'">
-            <el-date-picker
-              v-model="form.openMarkdate"
-              type="datetime"
-              style="width: auto"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="选择日期">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'确认日期'">
-            <el-date-picker
-              v-model="form.fillingDate"
-              type="datetime"
-              style="width: auto"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="选择日期">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="'中标服务费(元)'">
-            <el-input-number style="width: auto" v-model="form.serviceFee" :min="0"></el-input-number>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'付款方'">
-            <el-input v-model="form.payer"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="'缴费时间'">
-            <el-date-picker
-              v-model="form.paymentTime"
-              type="datetime"
-              style="width: auto"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="选择日期">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'缴费方式'">
-            <el-input v-model="form.paymentType"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="'发票时间'">
-            <el-date-picker
-              v-model="form.invoicingTime"
-              type="datetime"
-              style="width: auto"
-              value-format="yyyy-MM-dd HH:mm:ss"
-              placeholder="选择日期">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'发票号'">
-            <el-input v-model="form.invoicingNo"></el-input>
-          </el-form-item>
-        </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
@@ -196,19 +128,6 @@
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="20">
-        <el-col :span="12">
-          <el-form-item :label="'结转情况'">
-            <el-input v-model="form.carryForward"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="'资料寄送'">
-            <el-input v-model="form.sendData"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
       <!--<el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'项目类型'" prop="pojectType">
@@ -687,9 +606,7 @@ export default {
         ifPersonal: '0',
         budgetAmount: '1',
         projectLeader: null,
-        bidwinningAmount: null,
         filingNo: null,
-        fillingDate: null,
         pojectType: null,
         projectName: null,
         pojectNo: null,
@@ -702,19 +619,11 @@ export default {
         buyingEmail: null,
         enrollStartdate: null,
         enrollEnddate: null,
-        openMarkdate: null,
         proExamine: null,
         proSystem: null,
-        serviceFee: null,
-        paymentTime: null,
-        paymentType: null,
-        invoicingNo: null,
-        invoicingTime: null,
         serviceLife: 0,
-        carryForward: null,
         proPlan: null,
-        payer: null,
-        sendData: null,
+        companyName: null
       },
       postForm: {
         packageName: null, // 名称
@@ -730,16 +639,25 @@ export default {
         quantity: 1
       },
       zArray: [
-        {'label': '技术', 'value': '技术'},
-        {'label': '经济', 'value': '经济'},
-        {'label': '技术&经济', 'value': '技术&经济'},
-        {'label': '生物信息学', 'value': '生物信息学'},
-        {'label': '人体遗传学', 'value': '人体遗传学'},
-        {'label': '机构力学', 'value': '机构力学'}
+        {'label': '技术', 'value': '技术' },
+        {'label': '经济', 'value': '经济' },
+        {'label': '技术&经济', 'value': '技术&经济' },
+        {'label': '生物信息学', 'value': '生物信息学' },
+        {'label': '人体遗传学', 'value': '人体遗传学' },
+        {'label': '机构力学', 'value': '机构力学' }
       ],
       sArray: [
-        {'label': '男', 'value': '男'},
-        {'label': '女', 'value': '女'}
+        {'label': '男', 'value': '男' },
+        {'label': '女', 'value': '女' }
+      ],
+      wayArray: [
+        {'label': '公开招标', 'value': '公开招标' },
+        {'label': '竞争性磋商', 'value': '竞争性磋商' },
+        {'label': '询价', 'value': '询价' },
+        {'label': '竞争性谈判', 'value': '竞争性谈判' },
+        {'label': '单一来源谈判', 'value': '单一来源谈判' },
+        {'label': '邀请招标', 'value': '邀请招标' },
+        {'label': '遴选', 'value': '遴选' }
       ],
       pArray: [{
         'label': '教育系统',
@@ -848,11 +766,11 @@ export default {
       supplierList: [],
       majorList: [],
       columns: [
-        {text: '采购包名称', name: 'packageName'},
-        {text: '供应商', name: 'supplierName'},
-        {text: '预算金额（元）', name: 'subtotal'},
-        {text: '代理服务费（元）', name: 'agencyFee'},
-        {text: '保证金（元）', name: 'bond'}
+        { text: '采购包名称', name: 'packageName' },
+        { text: '供应商', name: 'supplierName' },
+        { text: '预算金额（元）', name: 'subtotal' },
+        { text: '代理服务费（元）', name: 'agencyFee' },
+        { text: '保证金（元）', name: 'bond' }
       ],
       disPl: true,
       rules: {

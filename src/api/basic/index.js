@@ -160,4 +160,62 @@ export function sendMessages(params) {
     data: params
   })
 }
-
+// 类别-获取列表
+export function getBaseDataList(params, query) {
+  const url = '/basedata/list/' + params.pageNum + '/' + params.pageSize
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('tenderrx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: query
+  })
+}
+// 类别-删除
+export function deleteBaseData(params) {
+  const url = '/basedata/delete/' + params.id
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('tenderrx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+  })
+}
+// 类别-新增
+export function addBaseData(params) {
+  return request({
+    url: '/basedata/add',
+    headers: {
+      'authorization': getToken('tenderrx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}// 类别-修改
+export function updateBaseData(params) {
+  return request({
+    url: '/basedata/update',
+    headers: {
+      'authorization': getToken('tenderrx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    data: params
+  })
+}
+// 类别-查询下级
+export function getByUserAndPrId(params) {
+  return request({
+    url: '/getByUserAndPrId/' + params.type + '/' + params.parent,
+    headers: {
+      'authorization': getToken('tenderrx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+  })
+}

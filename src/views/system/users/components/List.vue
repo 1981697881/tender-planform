@@ -40,7 +40,7 @@ export default {
         { text: '用户名称', name: 'name' },
         { text: '登录账号', name: 'username' },
         { text: '所属部门', name: 'tel' },
-        { text: '联系电话', name: 'tel' },
+        { text: '联系电话', name: 'deptName' },
         { text: '状态', name: 'status' },
         { text: '说明', name: 'description' },
 

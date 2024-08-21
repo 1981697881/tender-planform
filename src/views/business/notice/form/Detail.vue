@@ -55,6 +55,19 @@
       </el-row>
       <el-row :span="20">
         <el-col :span="12" :offset="4">
+          <el-form-item :label="'开标时间'" prop="openDate">
+            <el-date-picker
+              v-model="form.openDate"
+              type="datetime"
+              style="width: 100%"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :span="20">
+        <el-col :span="12" :offset="4">
           <el-form-item :label="'发布时间'" prop="releaseDate">
             <el-date-picker
               v-model="form.releaseDate"
@@ -116,6 +129,8 @@ export default {
         projectId: [
           {required: true, message: '请选择', trigger: 'change'}
         ], releaseDate: [
+          {required: true, message: '请选择', trigger: 'change'}
+        ], openDate: [
           {required: true, message: '请选择', trigger: 'change'}
         ],noticeType: [
           {required: true, message: '请选择', trigger: 'change'}

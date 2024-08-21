@@ -1,24 +1,21 @@
 <template>
   <div>
     <list
-       class="list-main box-shadow"
+      class="list-main box-shadow"
       :columns="columns"
       :loading="loading"
       :list="list"
       index
       @handle-size="handleSize"
       @handle-current="handleCurrent"
-       @row-click="rowClick"
-       @dblclick="dblclick"
+      @row-click="rowClick"
     />
 
   </div>
 </template>
-
-<script>
-import { mapGetters } from 'vuex'
-import { getNoticeList, deleteNotice } from '@/api/business/index'
-import List from '@/components/List'
+<script>import {mapGetters} from 'vuex';
+import {getBaseDataList, deleteBaseData} from '@/api/basic/index';
+import List from '@/components/List';
 export default {
   components: {
     List
@@ -31,13 +28,8 @@ export default {
       loading: false,
       list: {},
       columns: [
-        { text: '项目名称', name: 'projectName' },
-        { text: '公告标题', name: 'noticeTitle' },
-        { text: '文章关键字', name: 'keyword' },
-        { text: '作者', name: 'author' },
-        /*{ text: '公告类型', name: 'noticeType' },*/
-        { text: '开标时间', name: 'openDate' },
-        { text: '发布时间', name: 'releaseDate' },
+        { text: '编码', name: 'number' },
+        { text: '名称', name: 'name' }
       ]
     }
   },
@@ -56,19 +48,19 @@ export default {
       this.$emit('showDialog', obj.row)
     },
     Delivery(val) {
-      deleteNotice(val).then(res => {
+      deleteBaseData(val).then(res => {
         if (res.flag) {
           this.$store.dispatch('list/setClickData', '')
           this.$emit('uploadList')
         }
-      })
+      });
     },
     // 监听单击某一行
     rowClick(obj) {
       this.$store.dispatch('list/setClickData', obj.row)
     },
     uploadPr(val) {
-      this.fetchData(val,{
+      this.fetchData(val, {
         pageNum: 1,
         pageSize: this.list.size || 50
       })
@@ -78,9 +70,9 @@ export default {
       pageSize: this.list.size || 50
     }) {
       this.loading = true
-      getNoticeList(data, val).then(res => {
+      getBaseDataList(data, val).then(res => {
         this.loading = false
-        this.list = res.data
+        this.list = {records: res.data.list}
       })
     }
   }
@@ -88,7 +80,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.list-main {
-  height: calc(100vh - 250px);
-}
+  .list-main {
+    height: calc(100vh - 250px);
+  }
 </style>

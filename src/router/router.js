@@ -7,6 +7,8 @@ const map = {
   error: () => import('@/views/404'),
   '/basic': () => import('@/layout'),
   'clerk': () => import('@/views/basic/clerk'),
+  'category': () => import('@/views/basic/category'),
+  'classification': () => import('@/views/basic/classification'),
 
   'qualifications': () => import('@/views/preBid/qualifications'),
   'scoringCriteria': () => import('@/views/preBid/scoringCriteria'),

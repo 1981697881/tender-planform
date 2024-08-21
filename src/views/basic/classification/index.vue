@@ -10,10 +10,10 @@
 
     <el-dialog
       :visible.sync="visible"
-      title="抽取专家"
+      title="基本信息"
       v-if="visible"
       v-dialogDrag
-      :width="'80%'"
+      :width="'50%'"
       destroy-on-close
     >
       <info @hideDialog="hideWindow" @uploadList="upload" :listInfo="listInfo"></info>
@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import { TabsBar, List } from './components'
-import { Info } from './form'
+import { TabsBar, List } from './components';
+import { Info } from './form';
 
 export default {
   components: {
@@ -43,7 +43,7 @@ export default {
   methods: {
     delivery(obj) {
       if(obj) {
-        this.$refs.list.Delivery(obj.eid)
+        this.$refs.list.Delivery(obj)
       }
     },
     // 弹窗拖拽

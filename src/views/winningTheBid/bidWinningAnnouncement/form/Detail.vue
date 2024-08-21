@@ -1,8 +1,8 @@
 <template>
   <div>
-    <el-form :model="form" :rules="rules" ref="form" label-width="100px" :size="'mini'">
+    <el-form :model="form" :rules="rules" ref="form" label-width="120px" :size="'mini'">
       <el-row :span="20">
-        <el-col :span="12" :offset="4">
+        <el-col :span="12">
           <el-form-item :label="'关联项目'" prop="projectId">
             <el-select
               v-model="form.projectId"
@@ -17,30 +17,26 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :span="20">
-        <el-col :span="12" :offset="4">
+        <el-col :span="12">
           <el-form-item :label="'公告标题'" prop="noticeTitle">
             <el-input v-model="form.noticeTitle"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :span="20">
-        <el-col :span="12" :offset="4">
+        <el-col :span="12">
           <el-form-item :label="'文章关键字'" prop="keyword">
             <el-input v-model="form.keyword"></el-input>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :span="20">
-        <el-col :span="12" :offset="4">
+        <el-col :span="12">
           <el-form-item :label="'作者'" prop="author">
             <el-input v-model="form.author"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
       <el-row :span="20">
-        <el-col :span="12" :offset="4">
+        <el-col :span="12">
           <el-form-item :label="'公告类型'" prop="noticeType">
             <el-select v-model="form.noticeType" clearable style="width: 100%">
               <el-option
@@ -52,9 +48,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row :span="20">
-        <el-col :span="12" :offset="4">
+        <el-col :span="12">
           <el-form-item :label="'发布时间'" prop="releaseDate">
             <el-date-picker
               v-model="form.releaseDate"
@@ -63,6 +57,97 @@
               value-format="yyyy-MM-dd HH:mm:ss"
               placeholder="选择日期">
             </el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="'开标时间'">
+            <el-date-picker
+              v-model="form.openMarkdate"
+              type="datetime"
+              style="width: auto"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'确认日期'">
+            <el-date-picker
+              v-model="form.fillingDate"
+              type="datetime"
+              style="width: auto"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="'中标金额(万元)'">
+            <el-input-number style="width: auto" v-model="form.bidwinningAmount" :min="1"></el-input-number>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="'中标服务费(元)'">
+            <el-input-number style="width: auto" v-model="form.serviceFee" :min="0"></el-input-number>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'付款方'">
+            <el-input v-model="form.payer"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="'缴费时间'">
+            <el-date-picker
+              v-model="form.paymentTime"
+              type="datetime"
+              style="width: auto"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'缴费方式'">
+            <el-input v-model="form.paymentType"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="'发票时间'">
+            <el-date-picker
+              v-model="form.invoicingTime"
+              type="datetime"
+              style="width: auto"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'发票号'">
+            <el-input v-model="form.invoicingNo"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="'结转情况'">
+            <el-input v-model="form.carryForward"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'资料寄送'">
+            <el-input v-model="form.sendData"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -103,6 +188,17 @@ export default {
         noticeText: null,
         uploadEnclosure: null,
         author: null,
+        bidwinningAmount: null,
+        openMarkdate: null,
+        fillingDate: null,
+        serviceFee: null,
+        payer: null,
+        paymentTime: null,
+        paymentType: null,
+        invoicingTime: null,
+        invoicingNo: null,
+        carryForward: null,
+        sendData: null
       },
       loading: false,
       projectName: '',

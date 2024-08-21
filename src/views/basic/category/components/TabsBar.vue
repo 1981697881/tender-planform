@@ -11,8 +11,13 @@
           <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="query">查询</el-button>
         </el-col>
         <el-button-group style="float:right">
-          <!--<el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>-->
-          <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="alter">查看</el-button>
+          <el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>
+          <!--<el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="handlerAlter">修改</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="partake">查看项目</el-button>-->
+         <!-- <el-button :size="'mini'" type="primary" icon="el-icon-error" @click="disable" >禁用</el-button>
+          <el-button :size="'mini'" type="primary" icon="el-icon-success" @click="enable" >启用</el-button>-->
           <el-button :size="'mini'" type="primary" icon="el-icon-refresh" @click="upload">刷新</el-button>
         </el-button-group>
       </el-row>
@@ -32,17 +37,16 @@ export default {
     return {
       btnList: [],
       search: {
-        name: null,
-        projectStatus: 3
+        name: null
       }
     };
   },
   mounted() {
-   /* let path = this.$route.meta.id
+    let path = this.$route.meta.id
     getByUserAndPrId(path).then(res => {
       this.btnList = res.data
       this.$forceUpdate();
-    });*/
+    });
   },
   methods: {
     onFun(method){
@@ -56,7 +60,7 @@ export default {
           type: 'warning'
         }).then(() => {
           this.$emit('delList', {
-            eid: this.clickData.eid
+            id: this.clickData.id
           })
         }).catch(() => {
           this.$message({
@@ -71,7 +75,7 @@ export default {
         })
       }
     },
-    alter() {
+    handlerAlter() {
       if (this.clickData.id) {
         this.$emit('showDialog', this.clickData)
       } else {
@@ -79,36 +83,6 @@ export default {
           message: '无选中行',
           type: 'warning'
         })
-      }
-    },
-    disable() {
-      if (this.clickData.id) {
-        this.clickData.disable = true
-        alterClerk(this.clickData).then(res => {
-          if(res.flag) {
-            this.$emit('uploadList')
-          }
-        });
-      } else {
-        this.$message({
-          message: '无选中行',
-          type: 'warning'
-        });
-      }
-    },
-    enable() {
-      if (this.clickData.id) {
-        this.clickData.disable = false
-        alterClerk(this.clickData).then(res => {
-          if(res.flag){
-            this.$emit('uploadList')
-          }
-        })
-      } else {
-        this.$message({
-          message: '无选中行',
-          type: 'warning'
-        });
       }
     },
     query() {
@@ -122,8 +96,9 @@ export default {
     // 查询条件过滤
     qFilter() {
       let obj = {}
-      this.search.name != null && this.search.name != '' ? obj.projectName = this.search.name : null
-      this.search.projectStatus != null && this.search.projectStatus != '' ? obj.projectStatus = this.search.projectStatus : null
+      obj.type = 1
+      obj.isParent = 0
+      this.search.name != null && this.search.name != '' ? obj.name = this.search.name : null
       return obj
     },
     handleAdd(){

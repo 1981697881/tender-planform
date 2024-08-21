@@ -2,14 +2,14 @@
   <div class="list-header">
     <el-form v-model="search" :size="'mini'" :label-width="'80px'">
       <el-row :gutter="10">
-        <el-col :span="4">
+        <!--<el-col :span="4">
           <el-form-item :label="'关键字'">
             <el-input v-model="search.merchantsName" placeholder="名称"/>
           </el-form-item>
         </el-col>
         <el-col :span="2">
           <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="query">查询</el-button>
-        </el-col>
+        </el-col>-->
         <el-button-group style="float:right">
           <!-- <el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>-->
           <el-button :size="'mini'" type="primary" @click="handlerAdd">新增</el-button>
@@ -86,6 +86,7 @@ export default {
       this.$emit('showDialog')
     },
     upload() {
+      this.$store.dispatch('list/setClickData', '')
       this.$emit('uploadList')
     },
     handlerAlter() {

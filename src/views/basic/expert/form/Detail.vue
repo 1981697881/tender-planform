@@ -41,15 +41,17 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'专业分类'">
+          <el-form-item :label="'类别'">
             <el-select v-model="form.major" class="width-full" placeholder="请选择">
-              <el-option :label="t.label" :value="t.value" v-for="(t,i) in zArray" :key="i"></el-option>
+              <el-option :label="t.label" :value="t.value" v-for="(t,i) in levelFormat1" :key="i"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'熟悉专业'">
-            <el-input v-model="form.knowMajor"></el-input>
+          <el-form-item :label="'所属品目'">
+            <el-select v-model="form.major" class="width-full" placeholder="请选择">
+              <el-option :label="t.label" :value="t.value" v-for="(t,i) in levelFormat2" :key="i"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
       </el-row>
@@ -229,6 +231,8 @@ export default {
       imgData: {},
       disPl: true,
       fileList: [],
+      levelFormat1: [],
+      levelFormat2: [],
       pArray: [
         {'label': '男', 'value': '男'},
         {'label': '女', 'value': '女'}
@@ -266,8 +270,34 @@ export default {
     if (this.listInfo) {
       this.form = this.listInfo
     }
+    this.fetchFormat1()
+    this.fetchFormat2()
   },
   methods: {
+    fetchFormat1(val) {
+      const data = {
+        pageNum: 1,
+        pageSize: 100
+      };
+      getUsersList(data, val).then(res => {
+        if (res.flag) {
+          this.loading = false;
+          this.levelFormat1 = res.data.records
+        }
+      });
+    },
+    fetchFormat2(val) {
+      const data = {
+        pageNum: 1,
+        pageSize: 100
+      };
+      getUsersList(data, val).then(res => {
+        if (res.flag) {
+          this.loading = false;
+          this.levelFormat2 = res.data.records
+        }
+      });
+    },
     saveData(form) {
       this.$refs[form].validate((valid) => {
         // 判断必填项
