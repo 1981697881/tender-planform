@@ -22,6 +22,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { alterClerk } from '@/api/basic/index'
+import { PrintSemi } from '@/tools/doPrint'
 import { getByUserAndPrId } from '@/api/system/index'
 export default {
   components: {},
@@ -47,6 +48,7 @@ export default {
     onFun(method){
       this[method]()
     },
+
     Delivery() {
       if (this.clickData.id) {
         this.$confirm('是否删除（' + this.clickData.name + '），删除后将无法恢复?', '提示', {

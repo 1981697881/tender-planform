@@ -337,6 +337,7 @@
               <el-date-picker
                 v-model="buyingUnitForm.registrationDate"
                 type="date"
+                style="width: auto"
                 format="yyyy 年 MM 月 dd 日"
                 value-format="yyyy-MM-dd"
                 placeholder="选择日期">

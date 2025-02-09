@@ -86,7 +86,7 @@ export default {
     },
     sending() {
       if (this.clickData.id) {
-        this.visible = true
+        this.$emit('showDialog', this.clickData)
       } else {
         this.$message({
           message: '无选中行',

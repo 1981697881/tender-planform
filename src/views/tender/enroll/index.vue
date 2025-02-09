@@ -13,7 +13,7 @@
       title="基本信息"
       v-if="visible"
       v-dialogDrag
-      :width="'50%'"
+      :width="'80%'"
       destroy-on-close
     >
       <info @hideDialog="hideWindow" @uploadList="upload" :listInfo="listInfo"></info>

@@ -61,13 +61,13 @@ export default {
       this.$emit('queryBtn', this.qFilter())
     },
     Delivery() {
-      if (this.clickData.uid) {
+      if (this.clickData.id) {
         this.$confirm('是否删除(' + this.clickData.merchantsName + ')，删除后将无法恢复?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$emit('delList', {uid: this.clickData.uid})
+          this.$emit('delList', {id: this.clickData.id})
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -90,7 +90,7 @@ export default {
       this.$emit('uploadList')
     },
     handlerAlter() {
-      if (this.clickData.uid) {
+      if (this.clickData.id) {
         this.$emit('showDialog', this.clickData)
       } else {
         this.$message({

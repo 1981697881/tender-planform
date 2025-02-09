@@ -5,6 +5,7 @@
         <div style="margin-top: 20px;margin-bottom: 10px">
           <el-button @click="setRow">添加</el-button>
           <el-button @click="delRow">删除</el-button>
+          <el-button @click="print">打印</el-button>
         </div>
         <el-table class="list-main" height="300px" :data="list1" border size="mini"
                   @selection-change="handleSelectionChange1" :highlight-current-row="true">
@@ -74,7 +75,7 @@
 </template>
 
 <script>import {getMajorList, choiceMajorList, choiceMajor} from '@/api/distribution/index'
-
+import { PrintSemi } from '@/tools/doPrint'
 export default {
   props: {
     listInfo: {
@@ -119,6 +120,17 @@ export default {
     }
   },
   methods: {
+    print() {
+      if (this.list1.length > 0) {
+        PrintSemi(this.list1, this.form.projectName)
+        LODOP.PREVIEW()
+      } else {
+        this.$message({
+          message: '无选中行',
+          type: 'warning'
+        });
+      }
+    },
     getChoiceMajorList(val) {
       choiceMajorList(val).then(res => {
         if (res.flag) {
