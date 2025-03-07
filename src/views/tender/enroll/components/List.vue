@@ -9,6 +9,7 @@
       @handle-size="handleSize"
       @handle-current="handleCurrent"
       @row-click="rowClick"
+      @dblclick="dblclick"
     />
 
   </div>

@@ -87,7 +87,6 @@ const PrintSemi = (data, projectName) => {
       } else {
         len += 1;
       }
-
     }
     return len;
   }

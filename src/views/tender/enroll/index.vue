@@ -5,7 +5,7 @@
       <div>
         <tabs-bar ref="tabs" @showDialog="handlerDialog" @delList="delivery"  @queryBtn="query" @uploadList="upload"/>
       </div>
-      <list ref="list"  @showDialog="handlerDialog" @uploadList="uploadPage"/>
+      <list ref="list"  @showDialog="handlerInfoDialog" @uploadList="uploadPage"/>
     </div>
 
     <el-dialog
@@ -18,22 +18,34 @@
     >
       <info @hideDialog="hideWindow" @uploadList="upload" :listInfo="listInfo"></info>
     </el-dialog>
+    <el-dialog
+      :visible.sync="visible2"
+      title="报名信息"
+      v-if="visible2"
+      v-dialogDrag
+      :width="'80%'"
+      destroy-on-close
+    >
+      <detail-info @hideDialog="hideWindow" @uploadList="upload" :listInfo="listInfo"></detail-info>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { TabsBar, List } from "./components";
-import { Info } from "./form";
+import { Info, DetailInfo } from "./form";
 
 export default {
   components: {
     TabsBar,
     List,
+    DetailInfo,
     Info
   },
   data() {
     return {
       visible: null,
+      visible2: null,
       listInfo: null
     };
   },
@@ -52,6 +64,7 @@ export default {
     },
     hideWindow(val) {
       this.visible = val
+      this.visible2 = val
     },
     handlerDialog(obj) {
       this.listInfo = null
@@ -60,6 +73,14 @@ export default {
         this.listInfo = info
       }
       this.visible = true
+    },
+    handlerInfoDialog(obj) {
+      this.listInfo2 = null
+      if(obj) {
+        const info = JSON.parse(JSON.stringify(obj))
+        this.listInfo = info
+      }
+      this.visible2 = true
     },
     // 查询
     query() {
