@@ -115,6 +115,11 @@
             <el-input-number style="width: auto" v-model="form.budgetAmount" :min="1"></el-input-number>
           </el-form-item>
         </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'报名费用'">
+            <el-input-number style="width: auto" v-model="form.regFee" :min="1"></el-input-number>
+          </el-form-item>
+        </el-col>
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
@@ -606,6 +611,7 @@ export default {
         demonstration: '0',
         ifPersonal: '0',
         budgetAmount: '1',
+        regFee: '1',
         projectLeader: null,
         filingNo: null,
         pojectType: null,
