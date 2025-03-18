@@ -191,7 +191,6 @@ export default {
       this.multipleSelection = val;
     },
     handleClick(tab, event) {
-      console.log(tab, event)
     },
     getChecked() {
       let array = this.$refs.tree1.getCheckedKeys();

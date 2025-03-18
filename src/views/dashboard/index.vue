@@ -214,6 +214,7 @@ export default {
       pageNum:  1,
       pageSize: 50
     }) {
+      val = { ...val, ...data }
       getProjectInitiationList(data, val).then(res => {
         if(res.flag){
           this.tableData = []

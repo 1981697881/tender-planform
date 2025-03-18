@@ -73,11 +73,11 @@ export default {
       pageSize: this.list.size || 50
     }) {
       this.loading = true
-      val = { ...val,...data }
+      val = { ...val, ...data }
       getProjectInitiationList(data, val).then(res => {
         this.loading = false;
         this.list = res.data;
-      });
+      })
     }
   }
 };

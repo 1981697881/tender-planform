@@ -113,9 +113,10 @@ export default {
     },
     disable() {
       if (this.clickData.uid) {
-        this.clickData.disable = true
-        this.clickData.status = 2
-        alterUsers(this.clickData).then(res => {
+        let params = {...this.clickData}
+        params.disable = true
+        params.status = 2
+        alterUsers(params).then(res => {
           if(res.flag) {
             this.$emit('uploadAll')
           }
@@ -129,9 +130,10 @@ export default {
     },
     enable() {
       if (this.clickData.uid) {
-        this.clickData.disable = false
-        this.clickData.status = 0
-        alterUsers(this.clickData).then(res => {
+        let params = {...this.clickData}
+        params.disable = false
+        params.status = 0
+        alterUsers(params).then(res => {
           if(res.flag){
             this.$emit('uploadAll')
           }
@@ -166,7 +168,7 @@ export default {
         }
       }else if(command=='2') {
         if (this.clickData.uid) {
-          this.$confirm('是否删除（' + this.clickData.empName + '），删除后将无法恢复?', '提示', {
+          this.$confirm('是否删除（' + this.clickData.name + '），删除后将无法恢复?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'

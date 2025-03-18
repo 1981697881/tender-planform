@@ -24,7 +24,7 @@ export default {
     List
   },
   computed: {
-    ...mapGetters(['node'])
+    ...mapGetters(['node', 'selections'])
   },
   data() {
     return {
@@ -75,7 +75,13 @@ export default {
           tHeader.push(item.text)
           filterVal.push(item.name)
         })
-        const list = this.list.records
+        var list = []
+        if (this.selections.length > 0) {
+          list = this.selections
+        } else {
+          list = this.list.records
+        }
+
         const data = this.formatJson(filterVal, list);
         // 这里还是使用export_json_to_excel方法比较好，方便操作数据
         excel.exportJsonToExcel({
@@ -129,6 +135,7 @@ export default {
       pageSize: this.list.size || 50
     }) {
       this.loading = true
+      val = { ...val, ...data }
       getProjectInitiationList(data, val).then(res => {
         this.loading = false
         this.list = res.data

@@ -288,7 +288,7 @@
         </el-row>
         <el-row :span="20" v-if="form.bond == '1'">
           <el-col :span="12" :offset="4">
-            <el-form-item :label="'保证金比例'" prop="unitOfMeasurement">
+            <el-form-item :label="'保证金比例'" prop="proportion">
               <el-select v-model="postForm.proportion" class="width-full" placeholder="请选择">
                 <el-option :label="t.label" :value="t.value" v-for="(t,i) in priceList" :key="i"></el-option>
               </el-select>

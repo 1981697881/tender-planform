@@ -218,7 +218,8 @@ export default {
           type: 'warning'
         }).then(() => {
           this.multipleSelection1.forEach((item) => {
-            this.list1.splice(item)
+            const delIndex = this.list1.findIndex((listItem, index) => listItem.id === item.id)
+            this.list1.splice(delIndex, 1)
           })
         }).catch(() => {
           this.$message({

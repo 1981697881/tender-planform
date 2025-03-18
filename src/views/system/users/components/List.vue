@@ -14,9 +14,8 @@
   </div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex';
-import { getUsersList, delUsers} from '@/api/system/index';
+<script>import {mapGetters} from 'vuex';
+import {getUsersList, delUsers} from '@/api/system/index';
 import List from '@/components/List';
 
 export default {
@@ -35,53 +34,54 @@ export default {
       type: null,
       checkDate: null,
       columns: [
-        { text: 'uid', name: 'uid', default: false},
-        { text: '用户编码', name: 'jobNum' },
-        { text: '用户名称', name: 'name' },
-        { text: '登录账号', name: 'username' },
-        { text: '所属部门', name: 'tel' },
-        { text: '联系电话', name: 'deptName' },
-        { text: '状态', name: 'status' },
-        { text: '说明', name: 'description' },
+        {text: 'uid', name: 'uid', default: false},
+        {text: '用户编码', name: 'jobNum'},
+        {text: '用户名称', name: 'name'},
+        {text: '登录账号', name: 'username'},
+        {text: '所属部门', name: 'tel'},
+        {text: '联系电话', name: 'deptName'},
+        {text: '状态', name: 'status'},
+        {text: '说明', name: 'description'},
 
       ]
     };
   },
 
   methods: {
-    handlerForm() {},
-      //监听每页显示几条
-      handleSize(val) {
-          this.list.size = val
-          this.fetchData()
-      },
-      //监听当前页
-      handleCurrent(val) {
-          this.list.current = val
-          this.fetchData()
-      },
+    handlerForm() {
+    },
+    //监听每页显示几条
+    handleSize(val) {
+      this.list.size = val
+      this.fetchData()
+    },
+    //监听当前页
+    handleCurrent(val) {
+      this.list.current = val
+      this.fetchData()
+    },
     // 弹窗拖拽
     handleDrag() {
       this.$refs.select.blur()
     },
     Delivery(val) {
       delUsers(val).then(res => {
-        if(res.flag){
+        if (res.flag) {
           this.$store.dispatch('list/setClickData', '');
           this.$emit('uploadList')
         }
       })
     },
     dblclick(obj) {
-        this.$emit('showDialog', obj.row)
+      this.$emit('showDialog', obj.row)
     },
-      getClickRow(){
-        return this.checkDate
-      },
-      //监听单击某一行
-      rowClick(obj) {
-          this.$store.dispatch('list/setClickData', obj.row);
-      },
+    getClickRow() {
+      return this.checkDate
+    },
+    //监听单击某一行
+    rowClick(obj) {
+      this.$store.dispatch('list/setClickData', obj.row);
+    },
     uploadPr(val) {
       this.fetchData(val, {
         pageNum: 1,
@@ -105,7 +105,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.list-main {
-  height: calc(100vh - 250px);
-}
+  .list-main {
+    height: calc(100vh - 250px);
+  }
 </style>
