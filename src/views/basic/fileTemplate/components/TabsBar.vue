@@ -54,7 +54,7 @@ export default {
     },
     Delivery() {
       if (this.clickData.id) {
-        this.$confirm('是否删除（' + this.clickData.companyName + '），删除后将无法恢复?', '提示', {
+        this.$confirm('是否删除（' + this.clickData.fileName + '），删除后将无法恢复?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

@@ -19,6 +19,7 @@
                 :data="fileData"
                 :limit="3"
                 :on-exceed="handleExceed"
+                :on-change="handleChange"
                 :file-list="fileList">
                 <el-button>上传</el-button>
               </el-upload>
@@ -64,7 +65,9 @@ export default {
   },
   methods: {
     handleAvatarSuccess(res, file) {
-      addUploadFile({fileName: res.data.name,fileSize: res.data.size,contentType: res.data.contentType}).then(reso => {
+      console.log(file)
+      console.log(res)
+      addUploadFile({fileName: file.name,fileSize: file.size,contentType: res.data.contentType}).then(reso => {
         if (reso.flag) {
           this.$emit('hideDialog', false)
           this.$emit('uploadList')

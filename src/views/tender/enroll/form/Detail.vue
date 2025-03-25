@@ -30,15 +30,27 @@
                 type="selection"
                 width="55">
               </el-table-column>
-              <el-table-column
-                v-for="(t,i) in columns2"
-                :key="i"
-                align="center"
-                :prop="t.name"
-                :label="t.text"
-                v-if="t.default!=undefined?t.default:true"
-                :width="t.width?t.width:''"
-              ></el-table-column>
+              <template v-for="(t,i) in columns2">
+                <el-table-column
+                  :key="i"
+                  v-if="t.default == 'escape'?true:false"
+                  :label="t.text"
+                  :width="t.width?t.width:''"
+                  align="center"
+                >
+                  <template width="90" slot-scope="scope">
+                    <span>{{scope.row.status == '1'?'已缴费':'未缴费'}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  :key="i"
+                  align="center"
+                  :prop="t.name"
+                  :label="t.text"
+                  v-else="t.default!=undefined?t.default:true"
+                  :width="t.width?t.width:''"
+                ></el-table-column>
+              </template>
             </el-table>
           </el-form-item>
         </el-col>
@@ -98,13 +110,13 @@ export default {
         {text: '计量单位', name: 'unitOfMeasurement'},
         {text: '规格说明', name: 'description'},
         {text: '报名数量', name: 'roleName'}],
-      columns2:[{text: '供应商名称', name: 'supplierName'},
+      columns2:[{text: '公司名称', name: 'companyName'},
         {text: '联系人', name: 'contacts'},
         {text: '联系人电话', name: 'contactNumber'},
         {text: '邮箱', name: 'mailbox'},
-        {text: '是否开票', name: 'openInvoice'},
-        {text: '发票编码', name: 'invoice'},
-        {text: '支付方式', name: 'type'},
+        {text: '是否缴费', name: 'status', default: 'escape'},
+        {text: '报名费', name: 'regFee'},
+        {text: '报名日期', name: 'createDate'},
         {text: '发送状态', name: 'sendStatus'}],
       pidS: [],
       rules: {
@@ -116,6 +128,7 @@ export default {
       this.form = this.listInfo
       this.getPurchase({projectId: this.form.id})
       this.getFileList({projectId: this.form.id})
+      this.perClick()
     }
   },
   methods: {
@@ -131,7 +144,7 @@ export default {
             formData.append('to', item.mailbox)
             formData.append('subject','测试')
             formData.append('content','测试')
-            formData.append('registrationId',item.registrationId)
+            formData.append('registrationId',item.id)
             sendMessages(formData).then(res => {
               if (res.flag && this.multipleSelection.length == index+1) {
                 this.perClick()

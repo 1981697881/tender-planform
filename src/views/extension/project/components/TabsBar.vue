@@ -22,35 +22,39 @@
           <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="query">查询</el-button>
         </el-col>
         <el-button-group style="float:right">
-            <el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>
+          <template v-for="(t,i) in btnList" >
+            <el-button :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>
+            <el-popover
+              v-else-if="t.category == 'popover'"
+              placement="left"
+              width="400"
+              :key="i"
+              trigger="manual"
+              v-model="assVisible"
+            >
+              <el-form-item :label="'员工'">
+                <el-select
+                  v-model="user"
+                  filterable
+                  remote
+                  placeholder="请输入关键词"
+                  :remote-method="remoteMethod"
+                  :loading="loading"
+                  class="width-full">
+                  <el-option :label="t.name" :value="t.uid" v-for="(t,i) in levelFormat"
+                             :key="i"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item style="text-align: center">
+                <el-button type="primary" @click="onSubmit">选择</el-button>
+              </el-form-item>
+              <el-button slot="reference" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>
+            </el-popover>
+          </template>
          <!-- <el-button :size="'mini'" type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-edit" @click="handlerAlter">修改</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-delete" @click="Delivery">删除</el-button>-->
-          <!--<el-popover
-            placement="left"
-            width="400"
-            trigger="manual"
-            v-model="assVisible"
-          >
-            <el-form-item :label="'员工'">
-              <el-select
-                v-model="user"
-                filterable
-                remote
-                placeholder="请输入关键词"
-                :remote-method="remoteMethod"
-                :loading="loading"
-                class="width-full">
-                <el-option :label="t.name" :value="t.uid" v-for="(t,i) in levelFormat"
-                           :key="i"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item style="text-align: center">
-              <el-button type="primary" @click="onSubmit">选择</el-button>
-            </el-form-item>
-            <el-button slot="reference" :size="'mini'" type="primary" icon="el-icon-thumb" @click="assignment">分派
-            </el-button>
-          </el-popover>-->
+
          <!-- <el-button :size="'mini'" type="primary" icon="el-icon-download" @click="download(1)">采购文件下载</el-button>-->
         <!--  <el-button :size="'mini'" type="primary" icon="el-icon-download" @click="download(2)">采购文件模板下载</el-button>
           <el-button :size="'mini'" type="primary" icon="el-icon-upload2" @click="uploadFile">招标文件</el-button>
@@ -81,10 +85,7 @@
       <el-form label-width="130px" :size="'mini'">
         <el-row :span="20" v-if="exFile==1">
           <el-checkbox-group v-model="checkList">
-            <el-checkbox style="width: 100%" :label="0">委托协议（工程）</el-checkbox>
-            <el-checkbox style="width: 100%" :label="1">招标文件（报价）</el-checkbox>
-            <el-checkbox style="width: 100%" :label="2">招标文件（摇珠）</el-checkbox>
-            <el-checkbox style="width: 100%" :label="3">招标文件确认书</el-checkbox>
+            <el-checkbox style="width: 100%" v-for="(item,index) in localFileList" :key="index" :label="item.value">{{item.label}}</el-checkbox>
           </el-checkbox-group>
         </el-row>
         <el-row :span="20" v-else>
@@ -106,7 +107,7 @@ import {addProjectInitiation, projectAudit,projectAuditNo} from '@/api/extension
 import fileDownload from 'js-file-download'
 import ajax from "@/utils/ajax"
 import html2Canvas from 'html2canvas'
-import Canvas2Image from 'Canvas2Image'
+import Canvas2Image from 'canvas2image'
 import vueQr from 'vue-qr'
 export default {
   components: {
@@ -120,6 +121,19 @@ export default {
       user: null,
       btnList: [],
       fileList: [],
+      localFileList: [{
+        label: '委托协议（工程）',
+        value: 0
+      },{
+        label: '招标文件（报价）',
+        value: 1
+      },{
+        label: '招标文件（摇珠）',
+        value: 2
+      },{
+        label: '招标文件确认书',
+        value: 3
+      },],
       checkList: [],
       levelFormat: [],
       radio: 0,
@@ -184,27 +198,28 @@ export default {
     },
     // 下载图片地址和保存的图片名称
     downloadImage(imgsrc, name) {
-      let that = this
-      var image = new Image()
-      image.setAttribute('crossOrigin', 'anonymous')
-      image.onload = function () {
-        var canvas = document.createElement('canvas')
-        let w = image.width;
-        let h = image.height;
-        var context = canvas.getContext('2d')
-        var ratio = that.getPixelRatio(context);
-        canvas.width = w * ratio;
-        canvas.height = h * ratio;
-        context.drawImage(image, 0, 0, canvas.width, canvas.height)
-        context.scale(ratio, ratio);
-        var url = Canvas2Image.convertToJPEG(canvas, w, h).src// 得到图片的base64编码数据
-        var a = document.createElement('a') // 生成一个a元素
-        var event = new MouseEvent('click') // 创建一个单击事件
-        a.download = name || 'photo' // 设置图片名称
-        a.href = url // 将生成的URL设置为a.href属性
-        a.dispatchEvent(event) // 触发a的单击事件
-      }
-      image.src = imgsrc
+      const image = new Image();
+      image.crossOrigin = 'anonymous'; // 直接设置属性，无需 setAttribute
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const ratio = window.devicePixelRatio || 1; // 直接获取设备像素比
+
+        canvas.width = image.width * ratio;
+        canvas.height = image.height * ratio;
+        ctx.scale(ratio, ratio); // 先缩放上下文
+        ctx.drawImage(image, 0, 0, image.width, image.height); // 绘制原始尺寸
+
+        // 生成 JPEG Data URL
+        const url = canvas.toDataURL('image/jpeg', 1.0);
+
+        // 创建下载链接
+        const a = document.createElement('a');
+        a.download = name || 'photo';
+        a.href = url;
+        a.click(); // 直接触发点击，无需创建 MouseEvent
+      };
+      image.src = imgsrc;
     },
     handleAudit() {
       if (this.clickData.id) {
@@ -262,8 +277,8 @@ export default {
         this.list = [];
       }
     },
-    download(val) {
-      this.exFile = val
+    download1() {
+      this.exFile = 1
       if (this.exFile == 1) {
         if (this.clickData.id) {
           this.visible = true
@@ -276,6 +291,11 @@ export default {
       } else {
         this.visible = true
       }
+      this.getFileList()
+    },
+    download2() {
+      this.exFile = 2
+      this.visible = true
       this.getFileList()
     },
     onSubmit() {
@@ -301,7 +321,8 @@ export default {
     confirm() {
       if (this.exFile == '1') {
         this.checkList.forEach((item, index) => {
-          ajax.downloadFile(`${window.location.origin}/tenderings/file/download?fileName=1667018624973.xlsx`, {}, {fileName: '1667018624973.xlsx'})
+          var flieName = this.localFileList[this.localFileList.findIndex(file => file.value == item)].label
+          ajax.downloadFile(`${window.location.origin}/tenderings/file/download?fileName=` + flieName, {}, {fileName: flieName})
           if (index + 1 == this.checkList.length) {
             this.$message({
               type: 'success',
@@ -310,17 +331,8 @@ export default {
           }
         })
       } else {
-          console.log(this.radio)
-          ajax.downloadFile(`${window.location.origin}/tenderings/file/download?fileName=` + this.radio, {}, {fileName: this.radio})
-          /* downloadFile({fileName: '1667018624973.xlsx'}).then(res => {
-             fileDownload(res.data, '1667018624973.xlsx')
-             this.$message({
-               type: 'success',
-               message: '下载成功'
-             })
-           })*/
+        ajax.downloadFile(`${window.location.origin}/tenderings/file/download?fileName=` + this.radio, {}, {fileName: this.radio})
       }
-
     },
     onFun(method) {
       this[method]()
