@@ -175,7 +175,6 @@ export default {
       projectInitiationForm({projectName: this.projectName}).then(res => {
         this.loading = false;
         this.projectList = res.data
-        console.log(this.projectList)
       })
     },
   }

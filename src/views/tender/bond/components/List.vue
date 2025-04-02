@@ -29,11 +29,12 @@ export default {
       loading: false,
       list: {},
       columns: [
-        {text: '项目编号', name: 'pojectNo'},
-        {text: '项目名称', name: 'projectName'},
-        {text: '采购预算', name: 'budgetAmount'},
-        {text: '采购方式', name: 'procurementMethod'},
-        {text: '待确认数量', name: 'count'}
+        { text: '项目编号', name: 'pojectNo' },
+        { text: '项目名称', name: 'projectName' },
+        { text: '采购预算', name: 'budgetAmount' },
+        { text: '采购方式', name: 'procurementMethod' },
+        { text: '待确认数量', name: 'count' },
+        { text: '状态', name: 'status' }
       ]
     };
   },

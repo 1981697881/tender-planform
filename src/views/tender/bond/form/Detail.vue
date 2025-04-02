@@ -4,7 +4,7 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <el-form-item :label="'子采购包'" prop="orgAttr">
-            <el-table class="list-main" height="300px" :data="list1" border size="mini" :highlight-current-row="true" @row-click="perClick">
+            <el-table class="list-main" height="300px" :data="list1" border size="mini" :highlight-current-row="true">
               <el-table-column
                 v-for="(t,i) in columns1"
                 :key="i"
@@ -90,6 +90,7 @@ export default {
     if (this.listInfo) {
       this.form = this.listInfo
       this.getPurchase({projectId: this.form.id})
+      this.perClick()
     }
   },
   methods: {

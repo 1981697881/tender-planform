@@ -243,7 +243,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :span="20">
+        <!--<el-row :span="20">
           <el-col :span="10" :offset="4">
             <el-form-item :label="'供应商'">
               <el-select
@@ -262,7 +262,7 @@
           <el-col :span="2">
             <el-button type="primary" @click="winBasic(2)" size="mini" icon="el-icon-edit"></el-button>
           </el-col>
-        </el-row>
+        </el-row>-->
         <el-row :span="20">
           <el-col :span="12" :offset="4">
             <el-form-item :label="'数量'">
@@ -774,7 +774,7 @@ export default {
       majorList: [],
       columns: [
         { text: '采购包名称', name: 'packageName' },
-        { text: '供应商', name: 'supplierName' },
+        // { text: '供应商', name: 'supplierName' },
         { text: '预算金额（元）', name: 'subtotal' },
         { text: '代理服务费（元）', name: 'agencyFee' },
         { text: '保证金（元）', name: 'bond' }

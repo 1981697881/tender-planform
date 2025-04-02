@@ -20,6 +20,7 @@
       index
       selfAdaption
       @row-click="rowClick"
+      @dblclick="dblclick"
     />
   </div>
 </template>
@@ -61,6 +62,9 @@ export default {
 
   },
   methods: {
+    dblclick(obj) {
+      this.$emit('showGroupDialog', obj.row)
+    },
     //监听单击某一行
     rowClick(obj) {
       this.$store.dispatch('list/setClickData', obj.row);

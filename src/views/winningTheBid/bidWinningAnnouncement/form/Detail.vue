@@ -185,7 +185,7 @@ export default {
         noticeType: '中标',
         releaseDate: null,
         keyword: null,
-        noticeText: null,
+        noticeText: '',
         uploadEnclosure: null,
         author: null,
         bidwinningAmount: null,
@@ -256,7 +256,6 @@ export default {
       projectInitiationForm({projectName: this.projectName}).then(res => {
         this.loading = false;
         this.projectList = res.data
-        console.log(this.projectList)
       })
     },
   }
