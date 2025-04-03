@@ -242,7 +242,7 @@ export default {
   },
   methods: {
     handleAvatarSuccess(res, file) {
-      addUploadFile({projectId: this.form.id,fileName: res.data.name,fileSize: res.data.size,contentType: res.data.contentType}).then(reso => {
+      addUploadFile({projectId: this.form.id,fileName: file.name,fileSize: file.size,contentType: res.data.contentType}).then(reso => {
         if (reso.flag) {
           this.fetchFileData({projectId: this.form.id})
         }
