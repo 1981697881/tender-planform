@@ -39,12 +39,10 @@
           <!-- 数组循环 -->
           <div class="cell" v-for="(item,index) in tableData" @click.stop="clickDate(item)">
             <!-- 加数据 -->
-            <div v-if="data.day == item.day">
-              <div v-for="(it,iIndex) in tableData[index].info">
-                <div class="info text-center">
-                  <i class="el-icon-info"></i>
-                  <b>{{it.projectName}} </b>
-                </div>
+            <div v-if="data.day == item.openMarkdate">
+              <div class="info text-center">
+                <i class="el-icon-postcard"></i>
+                <b>项目({{item.info.length}}) </b>
               </div>
             </div>
           </div>
@@ -68,7 +66,7 @@
     </el-row>-->
     <el-dialog
       :visible.sync="visible"
-      title="维护资料"
+      title="项目信息"
       v-if="visible"
       :width="'50%'"
       destroy-on-close
@@ -86,9 +84,26 @@
               v-if="t.default!=undefined?t.default:true"
               :width="t.width?t.width:''"
             ></el-table-column>
+            <el-table-column
+              fixed="right"
+              label="操作"
+              width="100">
+              <template slot-scope="scope">
+                <el-button @click="handleUpdate(scope.row)" type="text" size="small">修改</el-button>
+              </template>
+            </el-table-column>
           </el-table>
         </el-row>
       </el-form>
+      <el-dialog
+        :visible.sync="visible2"
+        title="基本信息"
+        v-if="visible2"
+        :width="'50%'"
+        append-to-body
+      >
+        <info @hideDialog="hideWindow" @uploadList="fetchDateData" :listInfo="listInfo"></info>
+      </el-dialog>
     </el-dialog>
   </div>
 </template>
@@ -107,6 +122,7 @@ import TodoList from './components/TodoList'
 import { mainReport } from '@/api/system/index'
 import {getProjectInitiationList} from '@/api/extension/index'
 import moment from "moment";
+import { Info} from "../extension/project/form";
 const lineChartData = {
   newVisitis: {
     expectedData: [100, 120, 161, 134, 105, 160, 165],
@@ -138,6 +154,7 @@ export default {
     PieChart,
     BarChart,
     TodoList,
+    Info,
   },
   computed: {
     ...mapGetters(["name"]),
@@ -146,6 +163,8 @@ export default {
     return {
       loading: false,
       visible: false,
+      visible2: false,
+      listInfo: null,
       list: [],
       columns: [
         { text: '项目名称', name: 'projectName' },
@@ -205,6 +224,18 @@ export default {
     this.fetchDateData({openMarkdate: this.month})
   },
   methods: {
+    handleUpdate(obj){
+      this.listInfo = null
+      if(obj) {
+        const info = JSON.parse(JSON.stringify(obj))
+        this.listInfo = info
+      }
+      this.visible2 = true
+    },
+    hideWindow(val) {
+      this.visible = val
+      this.visible2 = val
+    },
     clickDate(val){
       this.visible= true
       console.log(val)
@@ -218,20 +249,34 @@ export default {
       getProjectInitiationList(data, val).then(res => {
         if(res.flag){
           this.tableData = []
-            res.data.records.forEach((item,index)=>{
+          this.tableData = res.data.records.reduce((acc, current) => {
+            const existingGroup = acc.find(item => item.openMarkdate === current.openMarkdate.substring(0,10));
+            if (existingGroup) {
+              existingGroup.info.push(current);
+            } else {
+              acc.push({
+                openMarkdate: current.openMarkdate.substring(0,10),
+                info: [current]
+              });
+            }
+            return acc;
+          }, []);
+            /*res.data.records.forEach((item,index)=>{
               let number = 0
+              console.log(this.tableData.length)
               if(this.tableData.length>0){
                 this.tableData.forEach((date)=>{
-                  if(date.day == item.fillingDate){
+                  if(date.day == item.openMarkdate){
                     date.info.push(item)
                     number++;
                   }
                 })
               }
+              console.log(number)
               if(number==0){
                 this.tableData.push({day: item.openMarkdate.substring(0,10),info: [item]})
               }
-            })
+            })*/
           console.log(this.tableData)
         }
       });
