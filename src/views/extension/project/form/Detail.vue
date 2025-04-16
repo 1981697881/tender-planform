@@ -124,12 +124,12 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'服务年限'">
-            <el-input-number style="width: auto" v-model="form.serviceLife" :min="0"></el-input-number>
+            <el-input-number :precision="1" :step="0.1" style="width: auto" v-model="form.serviceLife" :min="0"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'到期时间'">
-            <span>{{endDate}}</span>
+            <span>{{form.serviceEnddate}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -620,6 +620,7 @@ export default {
         procurementMethod: null,
         fundingSource: null,
         buyingUnit: null,
+        serviceEnddate: null,
         majorId: [],
         buyingContacts: null,
         buyingPhone: null,
@@ -851,8 +852,9 @@ export default {
     },
     form: {
       handler(val) {
-        if (this.form.serviceLife != null) {
-          this.endDate = this.getDay(this.form.fillingDate, this.form.serviceLife).date
+        console.log(this.form)
+        if (this.form.serviceLife != null && this.form.serviceEnddate != null) {
+          this.form.serviceEnddate = this.getDay(this.form.fillingDate, this.form.serviceLife).date
         }
       },
       deep: true
@@ -953,28 +955,43 @@ export default {
       }
       return m;
     },
-    // 查询前后三天日期
-    getDay(date, day) {
-      if (date == '') {
-        var today = new Date();
+    getDay(date, yearsInput) {
+      let currentDate;
+      if (!date) {
+        currentDate = new Date(); // 无日期参数则用当前日期
       } else {
-        var today = new Date(date);
+        currentDate = new Date(date); // 解析输入日期
       }
-      var targetday_milliseconds = today.getTime()
-      today.setTime(targetday_milliseconds) //注意，这行是关键代码
-      var tYear = today.getFullYear() + day
-      var tMonth = today.getMonth()
-      var tDate = today.getDate()
-      var getDay = today.getDay()
-      tMonth = this.doHandleMonth(tMonth + 1)
-      tDate = this.doHandleMonth(tDate)
-      var weeks = new Array('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
-      var week = weeks[getDay]
+
+      // 分离整数年和小数年部分
+      const integerYears = Math.floor(yearsInput);
+      const fractionalYears = yearsInput - integerYears;
+
+      // 将小数年转换为月份和天数
+      const totalMonths = fractionalYears * 12; // 总月份（含小数）
+      const integerMonths = Math.floor(totalMonths); // 整数月
+      const decimalMonths = totalMonths - integerMonths; // 剩余小数月
+      const daysToAdd = Math.round(decimalMonths * 30); // 按每月30天估算天数
+
+      // 创建调整后的日期对象
+      const adjustedDate = new Date(currentDate);
+      adjustedDate.setFullYear(currentDate.getFullYear() + integerYears); // 加整数年
+      adjustedDate.setMonth(currentDate.getMonth() + integerMonths); // 加整数月
+      adjustedDate.setDate(adjustedDate.getDate() + daysToAdd); // 加估算天数
+
+      // 格式化日期组件
+      const format = (num) => num.toString().padStart(2, '0');
+      const tYear = adjustedDate.getFullYear();
+      const tMonth = format(adjustedDate.getMonth() + 1); // 月份从0开始需+1
+      const tDate = format(adjustedDate.getDate());
+      const weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+      const week = weeks[adjustedDate.getDay()];
+
       return {
         day: tDate,
         week: week,
-        date: tYear + '-' + tMonth + '-' + tDate
-      }
+        date: `${tYear}-${tMonth}-${tDate}`
+      };
     },
     addRow() {
       if (this.form.id != null) {

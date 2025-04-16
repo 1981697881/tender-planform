@@ -37,12 +37,16 @@
           <!-- 这里加了周六周天的判断 -->
           <div class="weeked">{{data.day}}</div>
           <!-- 数组循环 -->
-          <div class="cell" v-for="(item,index) in tableData" @click.stop="clickDate(item)">
+          <div class="cell" v-for="(item,index) in tableData">
             <!-- 加数据 -->
-            <div v-if="data.day == item.openMarkdate">
-              <div class="info text-center">
-                <i class="el-icon-postcard"></i>
-                <b>项目({{item.info.length}}) </b>
+            <div v-if="data.day == item.date">
+              <div class="info text-center" style="padding: 4px" v-if="item.info.length>0" @click.stop="clickDate(item.info)">
+                <i class="el-icon-aim"></i>
+                <b>开标：{{item.info.length}} </b>
+              </div>
+              <div class="info text-center" v-if="item.info2.length>0" @click.stop="clickDate(item.info2)">
+                <i class="el-icon-timer"></i>
+                <b>到期项目：{{item.info2.length}} </b>
               </div>
             </div>
           </div>
@@ -238,8 +242,7 @@ export default {
     },
     clickDate(val){
       this.visible= true
-      console.log(val)
-      this.list = val.info
+      this.list = val
     },
     fetchDateData(val={openMarkdate: this.month}, data = {
       pageNum:  1,
@@ -250,14 +253,24 @@ export default {
         if(res.flag){
           this.tableData = []
           this.tableData = res.data.records.reduce((acc, current) => {
-            const existingGroup = acc.find(item => item.openMarkdate === current.openMarkdate.substring(0,10));
-            if (existingGroup) {
-              existingGroup.info.push(current);
+            // 处理 openMarkdate 的分组
+            const openDate = current.openMarkdate.substring(0, 10);
+            let openGroup = acc.find(item => item.date === openDate);
+            if (openGroup) {
+              openGroup.info.push(current);
             } else {
-              acc.push({
-                openMarkdate: current.openMarkdate.substring(0,10),
-                info: [current]
-              });
+              acc.push({ date: openDate, info: [current], info2: [] });
+            }
+
+            // 处理 enrollEnddate 的分组
+            if(current.serviceEnddate != null){
+              const endDate = current.serviceEnddate.substring(0, 10);
+              let endGroup = acc.find(item => item.date === endDate);
+              if (endGroup) {
+                endGroup.info2.push(current);
+              } else {
+                acc.push({ date: endDate, info: [], info2: [current] });
+              }
             }
             return acc;
           }, []);
@@ -277,7 +290,6 @@ export default {
                 this.tableData.push({day: item.openMarkdate.substring(0,10),info: [item]})
               }
             })*/
-          console.log(this.tableData)
         }
       });
     },
