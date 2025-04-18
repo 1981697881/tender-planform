@@ -4,7 +4,7 @@
       <div class="scan" :ref="'lessonTableImg'">
         <vue-qr
           class="scanImg"
-          :text="'http://14.29.254.232:50025/tenderings/redirect/scanResult?pojectNo='+pojectNo"
+          :text="'http://113.107.2.14:50025/tenderings/redirect/scanResult?pojectNo='+pojectNo"
           :margin="0"
           :logoScale="0.2"
         >

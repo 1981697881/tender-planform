@@ -5,7 +5,7 @@ import { resetRouter } from '@/router'
 const state = {
   token: getToken('tenderrx'),
   name: '',
-  url: 'http://14.29.254.232:50025',
+  url: 'http://113.107.2.14:50025',
   avatar: '',
   plper: '',
   username: '',
