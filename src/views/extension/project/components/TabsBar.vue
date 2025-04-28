@@ -166,12 +166,26 @@ export default {
     exportScan() {
       if (this.clickData.id) {
         this.pojectNo = this.clickData.pojectNo
-        html2Canvas(this.$refs.lessonTableImg, {
-          dpi: window.devicePixelRatio * 4,
-          useCORS: true // 【重要】开启跨域配置
-        }).then((canvas) => {
-          this.convertCanvasToImage(canvas);
-        })
+        // 添加$nextTick确保DOM更新
+        this.$nextTick(() => {
+          // 添加延迟确保二维码渲染完成
+          setTimeout(async () => {
+            try {
+              const canvas = await html2Canvas(this.$refs.lessonTableImg, {
+                useCORS: true,
+                allowTaint: true,
+                logging: true,  // 开启日志
+                scale: 2        // 替代dpi设置，更兼容的方案
+              });
+
+              // 临时显示canvas用于调试
+              document.body.appendChild(canvas);
+              this.convertCanvasToImage(canvas);
+            } catch (error) {
+              console.error('截图失败:', error);
+            }
+          }, 500);  // 增加500ms延迟确保渲染
+        });
       } else {
         this.$message({
           message: '无选中行',

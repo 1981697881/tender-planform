@@ -50,7 +50,7 @@
               :remote-method="remoteMethod1"
               :loading="loading"
               class="width-full">
-              <el-option :label="t.companyName" :value="t.id" v-for="(t,i) in buyingUnitList"
+              <el-option :label="t.companyName" :value="t.companyName" v-for="(t,i) in buyingUnitList"
                          :key="i"></el-option>
             </el-select>
           </el-form-item>
@@ -123,7 +123,28 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'服务年限'">
+          <el-form-item :label="'起始日期'" prop="registrationDate">
+            <el-date-picker
+              v-model="form.fillingDate"
+              type="date"
+              style="width: auto"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'年限类型'">
+            <el-select v-model="form.durationType" class="width-full"  placeholder="请选择">
+              <el-option :label="t.label" :value="t.value" v-for="(t,i) in durationList" :key="i"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <el-form-item :label="form.durationType">
             <el-input-number :precision="1" :step="0.1" style="width: auto" v-model="form.serviceLife" :min="0"></el-input-number>
           </el-form-item>
         </el-col>
@@ -617,6 +638,8 @@ export default {
         pojectType: null,
         projectName: null,
         pojectNo: null,
+        fillingDate: null,
+        durationType: '服务年限',
         procurementMethod: null,
         fundingSource: null,
         buyingUnit: null,
@@ -657,6 +680,10 @@ export default {
       sArray: [
         {'label': '男', 'value': '男' },
         {'label': '女', 'value': '女' }
+      ],
+      durationList: [
+        {'label': '服务年限', 'value': '服务年限' },
+        {'label': '供货年限', 'value': '供货年限' }
       ],
       wayArray: [
         {'label': '公开招标', 'value': '公开招标' },
@@ -852,7 +879,7 @@ export default {
     },
     form: {
       handler(val) {
-        if (this.form.serviceLife != null && this.form.serviceEnddate != null) {
+        if (this.form.serviceLife != null && this.form.fillingDate != null) {
           this.form.serviceEnddate = this.getDay(this.form.fillingDate, this.form.serviceLife).date
         }
       },
@@ -860,17 +887,20 @@ export default {
     },
   },
   mounted() {
-    this.fetchBuyingUnitList({})
-    this.fetchMajorList({})
-    this.fetchSupplierList({})
+    // this.fetchSupplierList({})
     if (this.listInfo) {
       this.form = this.listInfo
       if (this.form.buyingUnit != null) {
-        this.form.buyingUnit = Number(this.form.buyingUnit)
-        console.log(this.form.buyingUnit)
+        //this.form.buyingUnit = Number(this.form.buyingUnit)
+        this.fetchBuyingUnitList({companyName: this.form.buyingUnit})
       }
-      this.getChoiceMajorList({projectNo: this.form.pojectNo})
+      if (this.form.majorId) {
+        this.getChoiceMajorList({projectNo: this.form.pojectNo})
+      }
       this.fetchFormat({projectId: this.form.id})
+    }else{
+      this.fetchMajorList({})
+      this.fetchBuyingUnitList({})
     }
   },
   methods: {
@@ -882,12 +912,17 @@ export default {
       choiceMajorList(val).then(res => {
         if (res.flag && res.data.length > 0) {
           let array = []
+          let majorList = []
           res.data.forEach((item) => {
             array.push(item.id)
+            majorList.push(item)
           })
+          this.majorList = majorList
           this.form.majorId = array
+        } else {
+          this.fetchMajorList({})
         }
-      });
+      })
     },
     fetchBuyingUnitList(val) {
       const data = {

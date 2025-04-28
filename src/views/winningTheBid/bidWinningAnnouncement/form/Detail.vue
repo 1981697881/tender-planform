@@ -86,7 +86,19 @@
       </el-row>
       <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item :label="'中标金额(万元)'">
+          <el-form-item :label="'金额类型'">
+            <el-select v-model="form.amountType" clearable style="width: 100%">
+              <el-option
+                v-for="(t,i) in amountOptions"
+                :key="i"
+                :label="t.label"
+                :value="t.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="'中标金额('+(form.amountType =='金额'? '万元': '%')+')'">
             <el-input-number style="width: auto" v-model="form.bidwinningAmount" :min="1"></el-input-number>
           </el-form-item>
         </el-col>
@@ -193,6 +205,7 @@ export default {
         fillingDate: null,
         serviceFee: null,
         payer: null,
+        amountType: '金额',
         paymentTime: null,
         paymentType: null,
         invoicingTime: null,
@@ -206,6 +219,13 @@ export default {
       options: [{
         label: '招标',
         value: '招标'
+      }],
+      amountOptions: [{
+        label: '金额',
+        value: '金额'
+      }, {
+        label: '百分比',
+        value: '百分比'
       }],
       projectList: [],
       rules: {
