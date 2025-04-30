@@ -64,7 +64,7 @@
         <el-col :span="12">
           <el-form-item :label="'开标时间'">
             <el-date-picker
-              v-model="form.openMarkdate"
+              v-model="form.openDate"
               type="datetime"
               style="width: auto"
               value-format="yyyy-MM-dd HH:mm:ss"
@@ -201,7 +201,7 @@ export default {
         uploadEnclosure: null,
         author: null,
         bidwinningAmount: null,
-        openMarkdate: null,
+        openDate: null,
         fillingDate: null,
         serviceFee: null,
         payer: null,

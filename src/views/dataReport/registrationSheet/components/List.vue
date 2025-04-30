@@ -36,7 +36,7 @@ export default {
         {text: '采购方式', name: 'procurementMethod'},
         {text: '业务员', name: 'projectLeader'},
         //{text: '系统', name: 'proSystem'},
-        {text: '采购单位', name: 'buyingUnit'},
+        {text: '采购单位', name: 'buyingUnitName'},
         {text: '项目名称', name: 'projectName'},
         {text: '项目编号', name: 'pojectNo'},
         //{text: '编写', name: 'compile'},

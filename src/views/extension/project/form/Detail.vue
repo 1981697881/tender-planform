@@ -50,7 +50,7 @@
               :remote-method="remoteMethod1"
               :loading="loading"
               class="width-full">
-              <el-option :label="t.companyName" :value="t.companyName" v-for="(t,i) in buyingUnitList"
+              <el-option :label="t.companyName" :value="t.id" v-for="(t,i) in buyingUnitList"
                          :key="i"></el-option>
             </el-select>
           </el-form-item>
@@ -891,8 +891,8 @@ export default {
     if (this.listInfo) {
       this.form = this.listInfo
       if (this.form.buyingUnit != null) {
-        //this.form.buyingUnit = Number(this.form.buyingUnit)
-        this.fetchBuyingUnitList({companyName: this.form.buyingUnit})
+        this.form.buyingUnit = Number(this.form.buyingUnit)
+        this.fetchBuyingUnitList({id: this.form.buyingUnit})
       }
       if (this.form.majorId) {
         this.getChoiceMajorList({projectNo: this.form.pojectNo})
