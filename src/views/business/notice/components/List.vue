@@ -33,7 +33,6 @@ export default {
       columns: [
         { text: '项目名称', name: 'projectName' },
         { text: '公告标题', name: 'noticeTitle' },
-        { text: '文章关键字', name: 'keyword' },
         { text: '作者', name: 'author' },
         /*{ text: '公告类型', name: 'noticeType' },*/
         { text: '开标时间', name: 'openDate' },

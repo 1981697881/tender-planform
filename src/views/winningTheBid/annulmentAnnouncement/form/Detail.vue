@@ -27,13 +27,6 @@
       </el-row>
       <el-row :span="20">
         <el-col :span="12" :offset="4">
-          <el-form-item :label="'文章关键字'" prop="keyword">
-            <el-input v-model="form.keyword"></el-input>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :span="20">
-        <el-col :span="12" :offset="4">
           <el-form-item :label="'作者'" prop="author">
             <el-input v-model="form.author"></el-input>
           </el-form-item>
