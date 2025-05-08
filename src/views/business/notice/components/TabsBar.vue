@@ -2,14 +2,14 @@
   <div class="list-header">
     <el-form v-model="search" :size="'mini'" :label-width="'80px'">
       <el-row :gutter="10">
-        <!--<el-col :span="4">
+        <el-col :span="4">
           <el-form-item :label="'关键字'">
-            <el-input v-model="search.merchantsName" placeholder="名称"/>
+            <el-input v-model="search.projectName" placeholder="名称"/>
           </el-form-item>
         </el-col>
         <el-col :span="2">
           <el-button :size="'mini'" type="primary" icon="el-icon-search" @click="query">查询</el-button>
-        </el-col>-->
+        </el-col>
         <el-button-group style="float:right">
           <!-- <el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>-->
           <el-button :size="'mini'" type="primary" @click="handlerAdd">新增</el-button>
@@ -32,7 +32,7 @@ export default {
     return {
       btnList: [],
       search: {
-        merchantsName: null,
+        projectName: null,
         noticeType: '招标'
       }
     }
@@ -51,7 +51,7 @@ export default {
     // 查询条件过滤
     qFilter() {
       let obj = {}
-      this.search.merchantsName != null && this.search.merchantsName != '' ? obj.merchantsName = this.search.merchantsName : null
+      this.search.projectName != null && this.search.projectName != '' ? obj.projectName = this.search.projectName : null
       this.search.noticeType != null && this.search.noticeType != '' ? obj.noticeType = this.search.noticeType : null
       return obj
     },
@@ -62,7 +62,7 @@ export default {
     },
     Delivery() {
       if (this.clickData.uid) {
-        this.$confirm('是否删除(' + this.clickData.merchantsName + ')，删除后将无法恢复?', '提示', {
+        this.$confirm('是否删除(' + this.clickData.projectName + ')，删除后将无法恢复?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -86,6 +86,7 @@ export default {
       this.$emit('showDialog')
     },
     upload() {
+      this.search.projectName = null
       this.$store.dispatch('list/setClickData', '')
       this.$emit('uploadList')
     },

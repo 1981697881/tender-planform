@@ -32,7 +32,7 @@ export default {
       list: {},
       columns: [
         {text: '档案号', name: 'filingNo'},
-        {text: '安排时间', name: 'openMarkdate'},
+        {text: '安排时间', name: 'openDate'},
         {text: '采购方式', name: 'procurementMethod'},
         {text: '业务员', name: 'projectLeader'},
         //{text: '系统', name: 'proSystem'},
