@@ -111,7 +111,7 @@ export default {
         {text: '规格说明', name: 'description'},
         {text: '报名数量', name: 'roleName'}],
       columns2:[{text: '公司名称', name: 'companyName'},
-        {text: '联系人', name: 'contacts'},
+        {text: '联系人', name: 'transactorsName'},
         {text: '联系人电话', name: 'contactNumber'},
         {text: '邮箱', name: 'mailbox'},
         {text: '是否缴费', name: 'status', default: 'escape'},
