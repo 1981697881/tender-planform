@@ -93,7 +93,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'项目编号'">
-            <el-input v-model="form.pojectNo" readOnly placeholder="自动生成"></el-input>
+            <el-input v-model="form.pojectNo" placeholder="不录入则根据采购方式自动生成"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
