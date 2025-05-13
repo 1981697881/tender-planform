@@ -147,8 +147,8 @@ const PrintSemi = (data, projectName) => {
   LODOP.SET_SHOW_MODE('LANDSCAPE_DEFROTATED', 1);
   LODOP.SET_PRINT_STYLEA(0, 'AngleOfPageInside', 90);
   // 动态列表信息
-  let trheight = 9;// 用于每个竖线距离上面的固定长度
-  let thHeight = 11;// 用于每行距离上面的固定长度47.98
+  let trheight = 19;// 用于每个竖线距离上面的固定长度
+  let thHeight = 21;// 用于每行距离上面的固定长度47.98
   let newHeight = 0;// 用于动态增加一行的长度
   let lastSize = 0;// 分页前的那个下标
   let lastheght = 2;
@@ -163,29 +163,33 @@ const PrintSemi = (data, projectName) => {
   LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
   LODOP.SET_PRINT_STYLEA(0, 'FontSize', 18);
   LODOP.SET_PRINT_STYLEA(0,'FontName','黑体');
-  LODOP.ADD_PRINT_TEXT('13.15mm', '1mm', '25mm', '5.37mm', '专家名称');
+  LODOP.ADD_PRINT_TEXT('11.5mm', '1mm', '210mm', '10mm', '专家抽取表');
   LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
-  LODOP.ADD_PRINT_TEXT('13.15mm', '25mm', '15mm', '5.37mm', '性别');
+  LODOP.SET_PRINT_STYLEA(0, 'FontSize', 18);
+  LODOP.SET_PRINT_STYLEA(0,'FontName','黑体');
+  LODOP.ADD_PRINT_TEXT('23.15mm', '1mm', '25mm', '5.37mm', '专家名称');
   LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
-  LODOP.ADD_PRINT_TEXT('13.15mm', '40mm', '50mm', '5.37mm', '单位');
+  LODOP.ADD_PRINT_TEXT('23.15mm', '25mm', '15mm', '5.37mm', '性别');
   LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
-  LODOP.ADD_PRINT_TEXT('13.15mm', '90mm', '50mm', '5.37mm', '身份证号码');
+  LODOP.ADD_PRINT_TEXT('23.15mm', '40mm', '50mm', '5.37mm', '单位');
   LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
-  LODOP.ADD_PRINT_TEXT('13.15mm', '140mm', '40mm', '5.37mm', '手机号码');
+  LODOP.ADD_PRINT_TEXT('23.15mm', '90mm', '50mm', '5.37mm', '身份证号码');
   LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
-  LODOP.ADD_PRINT_TEXT('13.15mm', '180mm', '20mm', '5.37mm', '职称');
+  LODOP.ADD_PRINT_TEXT('23.15mm', '140mm', '40mm', '5.37mm', '手机号码');
+  LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
+  LODOP.ADD_PRINT_TEXT('23.15mm', '180mm', '20mm', '5.37mm', '职称');
   LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
   // 表格线
-  LODOP.ADD_PRINT_LINE('10mm', '1mm', '10mm', '200mm', 0, 1);//  最上条标题横线
-  LODOP.ADD_PRINT_LINE('19.31mm', '1mm', '19.31mm', '200mm', 0, 1);//  标题下横线
-  LODOP.ADD_PRINT_LINE('10mm', '1mm', '19.11mm', '1mm', 0, 1);//  最左竖线
+  LODOP.ADD_PRINT_LINE('20mm', '1mm', '20mm', '200mm', 0, 1);//  最上条标题横线
+  LODOP.ADD_PRINT_LINE('29.31mm', '1mm', '29.31mm', '200mm', 0, 1);//  标题下横线
+  LODOP.ADD_PRINT_LINE('20mm', '1mm', '29.11mm', '1mm', 0, 1);//  最左竖线
   // 添加一条线，参数(开始短点距离头部距离，开始端点距左边距离，结束端点距头部距离，结束端点距左边距离)
-  LODOP.ADD_PRINT_LINE('10mm', '25mm', '19.11mm', '25mm', 0, 1);
-  LODOP.ADD_PRINT_LINE('10mm', '40mm', '19.11mm', '40mm', 0, 1);
-  LODOP.ADD_PRINT_LINE('10mm', '90mm', '19.11mm', '90mm', 0, 1);
-  LODOP.ADD_PRINT_LINE('10mm', '140mm', '19.11mm', '140mm', 0, 1);
-  LODOP.ADD_PRINT_LINE('10mm', '180mm', '19.11mm', '180mm', 0, 1);
-  LODOP.ADD_PRINT_LINE('10mm', '200mm', '19.11mm', '200mm', 0, 1);
+  LODOP.ADD_PRINT_LINE('20mm', '25mm', '29.11mm', '25mm', 0, 1);
+  LODOP.ADD_PRINT_LINE('20mm', '40mm', '29.11mm', '40mm', 0, 1);
+  LODOP.ADD_PRINT_LINE('20mm', '90mm', '29.11mm', '90mm', 0, 1);
+  LODOP.ADD_PRINT_LINE('20mm', '140mm', '29.11mm', '140mm', 0, 1);
+  LODOP.ADD_PRINT_LINE('20mm', '180mm', '29.11mm', '180mm', 0, 1);
+  LODOP.ADD_PRINT_LINE('20mm', '200mm', '29.11mm', '200mm', 0, 1);
   for (let k = 0; k < data.length; k++) {
     let allProductNumber = 0;
     let aaa = '1234567890';
@@ -233,29 +237,33 @@ const PrintSemi = (data, projectName) => {
       LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
       LODOP.SET_PRINT_STYLEA(0, 'FontSize', 18);
       LODOP.SET_PRINT_STYLEA(0,'FontName','黑体');
-      LODOP.ADD_PRINT_TEXT('13.15mm', '1mm', '25mm', '5.37mm', '专家名称');
+      LODOP.ADD_PRINT_TEXT('11.5mm', '1mm', '210mm', '10mm', '专家抽取表');
       LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
-      LODOP.ADD_PRINT_TEXT('13.15mm', '25mm', '15mm', '5.37mm', '性别');
+      LODOP.SET_PRINT_STYLEA(0, 'FontSize', 18);
+      LODOP.SET_PRINT_STYLEA(0,'FontName','黑体');
+      LODOP.ADD_PRINT_TEXT('23.15mm', '1mm', '25mm', '5.37mm', '专家名称');
       LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
-      LODOP.ADD_PRINT_TEXT('13.15mm', '40mm', '50mm', '5.37mm', '单位');
+      LODOP.ADD_PRINT_TEXT('23.15mm', '25mm', '15mm', '5.37mm', '性别');
       LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
-      LODOP.ADD_PRINT_TEXT('13.15mm', '90mm', '50mm', '5.37mm', '身份证号码');
+      LODOP.ADD_PRINT_TEXT('23.15mm', '40mm', '50mm', '5.37mm', '单位');
       LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
-      LODOP.ADD_PRINT_TEXT('13.15mm', '140mm', '40mm', '5.37mm', '手机号码');
+      LODOP.ADD_PRINT_TEXT('23.15mm', '90mm', '50mm', '5.37mm', '身份证号码');
       LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
-      LODOP.ADD_PRINT_TEXT('13.15mm', '180mm', '20mm', '5.37mm', '职称');
+      LODOP.ADD_PRINT_TEXT('23.15mm', '140mm', '40mm', '5.37mm', '手机号码');
+      LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
+      LODOP.ADD_PRINT_TEXT('23.15mm', '180mm', '20mm', '5.37mm', '职称');
       LODOP.SET_PRINT_STYLEA(0, 'Alignment', 2);
       // 表格线
-      LODOP.ADD_PRINT_LINE('10mm', '1mm', '10mm', '200mm', 0, 1);//  最上条标题横线
-      LODOP.ADD_PRINT_LINE('19.31mm', '1mm', '19.31mm', '200mm', 0, 1);//  标题下横线
-      LODOP.ADD_PRINT_LINE('10mm', '1mm', '19.11mm', '1mm', 0, 1);//  最左竖线
+      LODOP.ADD_PRINT_LINE('20mm', '1mm', '20mm', '200mm', 0, 1);//  最上条标题横线
+      LODOP.ADD_PRINT_LINE('29.31mm', '1mm', '29.31mm', '200mm', 0, 1);//  标题下横线
+      LODOP.ADD_PRINT_LINE('20mm', '1mm', '29.11mm', '1mm', 0, 1);//  最左竖线
       // 添加一条线，参数(开始短点距离头部距离，开始端点距左边距离，结束端点距头部距离，结束端点距左边距离)
-      LODOP.ADD_PRINT_LINE('10mm', '25mm', '19.11mm', '25mm', 0, 1);
-      LODOP.ADD_PRINT_LINE('10mm', '40mm', '19.11mm', '40mm', 0, 1);
-      LODOP.ADD_PRINT_LINE('10mm', '90mm', '19.11mm', '90mm', 0, 1);
-      LODOP.ADD_PRINT_LINE('10mm', '140mm', '19.11mm', '140mm', 0, 1);
-      LODOP.ADD_PRINT_LINE('10mm', '180mm', '19.11mm', '180mm', 0, 1);
-      LODOP.ADD_PRINT_LINE('10mm', '200mm', '19.11mm', '200mm', 0, 1);
+      LODOP.ADD_PRINT_LINE('20mm', '25mm', '29.11mm', '25mm', 0, 1);
+      LODOP.ADD_PRINT_LINE('20mm', '40mm', '29.11mm', '40mm', 0, 1);
+      LODOP.ADD_PRINT_LINE('20mm', '90mm', '29.11mm', '90mm', 0, 1);
+      LODOP.ADD_PRINT_LINE('20mm', '140mm', '29.11mm', '140mm', 0, 1);
+      LODOP.ADD_PRINT_LINE('20mm', '180mm', '29.11mm', '180mm', 0, 1);
+      LODOP.ADD_PRINT_LINE('20mm', '200mm', '29.11mm', '200mm', 0, 1);
 
     }
   }
