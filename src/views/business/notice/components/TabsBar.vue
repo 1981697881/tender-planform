@@ -14,7 +14,7 @@
           <!-- <el-button v-for="(t,i) in btnList" :key="i" v-if="t.category == 'default'" :size="'mini'" type="primary" :icon="t.cuicon" @click="onFun(t.path)">{{t.menuName}}</el-button>-->
           <el-button :size="'mini'" type="primary" @click="handlerAdd">新增</el-button>
           <el-button :size="'mini'" type="primary" @click="handlerAlter">修改</el-button>
-          <!--<el-button :size="'mini'" type="primary" @click="Delivery">删除</el-button>-->
+          <el-button :size="'mini'" type="primary" @click="Delivery">删除</el-button>
           <el-button :size="'mini'" type="primary" @click="upload">刷新</el-button>
         </el-button-group>
       </el-row>
@@ -61,13 +61,13 @@ export default {
       this.$emit('queryBtn', this.qFilter())
     },
     Delivery() {
-      if (this.clickData.uid) {
-        this.$confirm('是否删除(' + this.clickData.projectName + ')，删除后将无法恢复?', '提示', {
+      if (this.clickData.id) {
+        this.$confirm('是否删除(' + this.clickData.noticeTitle + ')，删除后将无法恢复?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$emit('delList', {uid: this.clickData.uid})
+          this.$emit('delList', {id: this.clickData.id})
         }).catch(() => {
           this.$message({
             type: 'info',

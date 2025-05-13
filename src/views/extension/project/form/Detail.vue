@@ -20,7 +20,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'采购方式'">
+          <el-form-item :label="'采购方式'" prop="procurementMethod">
             <el-select v-model="form.procurementMethod" class="width-full"  placeholder="请选择">
               <el-option :label="t.label" :value="t.value" v-for="(t,i) in wayArray" :key="i"></el-option>
             </el-select>
@@ -92,8 +92,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="12">
-          <el-form-item :label="'项目编号'" prop="pojectNo">
-            <el-input v-model="form.pojectNo"></el-input>
+          <el-form-item :label="'项目编号'">
+            <el-input v-model="form.pojectNo" readOnly placeholder="自动生成"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -815,8 +815,8 @@ export default {
         projectName: [
           {required: true, message: '请输入', trigger: 'blur'}
         ],
-        pojectNo: [
-          {required: true, message: '请输入', trigger: 'blur'}
+        procurementMethod: [
+          {required: true, message: '请选择', trigger: 'change'}
         ]
       },
       rules2: {
