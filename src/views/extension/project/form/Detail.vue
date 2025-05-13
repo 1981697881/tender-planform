@@ -686,13 +686,12 @@ export default {
         {'label': '供货年限', 'value': '供货年限' }
       ],
       wayArray: [
-        {'label': '公开招标', 'value': '公开招标' },
-        {'label': '竞争性磋商', 'value': '竞争性磋商' },
-        {'label': '询价', 'value': '询价' },
-        {'label': '竞争性谈判', 'value': '竞争性谈判' },
-        {'label': '单一来源谈判', 'value': '单一来源谈判' },
-        {'label': '邀请招标', 'value': '邀请招标' },
-        {'label': '遴选', 'value': '遴选' }
+        {'label': '公招', 'value': '公招' },
+        {'label': '邀标', 'value': '邀标' },
+        {'label': '磋商', 'value': '磋商' },
+        {'label': '谈判', 'value': '谈判' },
+        {'label': '询价小额', 'value': '询价小额' },
+        {'label': '单一来源', 'value': '单一来源' }
       ],
       pArray: [{
         'label': '教育系统',
