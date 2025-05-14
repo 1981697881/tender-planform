@@ -34,7 +34,7 @@ export default {
         { text: '档案号', name: 'filingNo' },
         { text: '项目编号', name: 'pojectNo' },
         { text: '项目名称', name: 'projectName' },
-        { text: '日期', name: 'filingDate' },
+        { text: '日期', name: 'fillingDate' },
       ]
     }
   },

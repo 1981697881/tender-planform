@@ -145,7 +145,7 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="form.durationType">
-            <el-input-number :precision="1" :step="0.1" style="width: auto" v-model="form.serviceLife" :min="0"></el-input-number>
+            <el-input-number :precision="form.durationType == '服务年限'?1:0" :step="form.durationType == '服务年限'?0.1:1" style="width: auto" v-model="form.serviceLife" :min="0"></el-input-number>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -683,7 +683,7 @@ export default {
       ],
       durationList: [
         {'label': '服务年限', 'value': '服务年限' },
-        {'label': '供货年限', 'value': '供货年限' }
+        {'label': '供货期限', 'value': '供货期限' }
       ],
       wayArray: [
         {'label': '公招', 'value': '公招' },
@@ -879,7 +879,11 @@ export default {
     form: {
       handler(val) {
         if (this.form.serviceLife != null && this.form.fillingDate != null) {
-          this.form.serviceEnddate = this.getDay(this.form.fillingDate, this.form.serviceLife).date
+          if (this.form.durationType == '服务年限') {
+            this.form.serviceEnddate = this.getYear(this.form.fillingDate, this.form.serviceLife).date
+          } else {
+            this.form.serviceEnddate = this.getDay(this.form.fillingDate, this.form.serviceLife).date
+          }
         }
       },
       deep: true
@@ -988,7 +992,36 @@ export default {
       }
       return m;
     },
-    getDay(date, yearsInput) {
+    getDay(date, day) {
+      let currentDate;
+      if (!date) { // 处理空值更安全
+        currentDate = new Date();
+      } else {
+        currentDate = new Date(date);
+      }
+
+      // 将天数（含小数）转换为毫秒数并调整时间戳
+      const offset = day * 86400000; // 24*60*60*1000
+      const newTimestamp = currentDate.getTime() + offset;
+      const adjustedDate = new Date(newTimestamp);
+
+      // 获取调整后的日期组件
+      const tYear = adjustedDate.getFullYear();
+      const tMonth = adjustedDate.getMonth() + 1; // 月份从0开始需+1
+      const tDate = adjustedDate.getDate();
+      const dayOfWeek = adjustedDate.getDay(); // 0（周日）到6（周六）
+
+      // 格式化为两位数
+      const format = (num) => num.toString().padStart(2, '0');
+      const weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+
+      return {
+        day: format(tDate),
+        week: weeks[dayOfWeek],
+        date: `${tYear}-${format(tMonth)}-${format(tDate)}`
+      };
+    },
+    getYear(date, yearsInput) {
       // 解析输入日期
       const currentDate = date ? new Date(date) : new Date();
 
