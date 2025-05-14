@@ -16,8 +16,21 @@
       <el-row :gutter="20">
         <el-col :span="12">
           <el-form-item :label="'业务员'" prop="projectLeader">
-            <el-input v-model="form.projectLeader"></el-input>
+            <el-select
+              v-model="form.projectLeader"
+              filterable
+              remote
+              placeholder="请输入关键词"
+              :remote-method="remoteMethod4"
+              :loading="loading"
+              class="width-full">
+              <el-option :label="t.name" :value="t.name" v-for="(t,i) in userList"
+                         :key="i"></el-option>
+            </el-select>
           </el-form-item>
+<!--          <el-form-item :label="'业务员'" prop="projectLeader">-->
+<!--            <el-input v-model="form.projectLeader"></el-input>-->
+<!--          </el-form-item>-->
         </el-col>
         <el-col :span="12">
           <el-form-item :label="'采购方式'" prop="procurementMethod">
@@ -556,6 +569,7 @@
 import {getMajorList, choiceMajor, choiceMajorList, addMajor} from '@/api/distribution/index'
 import {getPurchaseCompanyList, addPurchaseCompany} from '@/api/purchase/index'
 import {getSupplierList, addSupplier} from '@/api/supplier/index'
+import {getUserList} from '@/api/system/index'
 
 export default {
   props: {
@@ -799,6 +813,7 @@ export default {
       buyingUnitList: [],
       supplierList: [],
       majorList: [],
+      userList: [],
       columns: [
         { text: '采购包名称', name: 'packageName' },
         // { text: '供应商', name: 'supplierName' },
@@ -891,6 +906,7 @@ export default {
   },
   mounted() {
     // this.fetchSupplierList({})
+    this.getUserList()
     if (this.listInfo) {
       this.form = this.listInfo
       if (this.form.buyingUnit != null) {
@@ -901,7 +917,7 @@ export default {
         this.getChoiceMajorList({projectNo: this.form.pojectNo})
       }
       this.fetchFormat({projectId: this.form.id})
-    }else{
+    } else {
       this.fetchMajorList({})
       this.fetchBuyingUnitList({})
     }
@@ -951,6 +967,17 @@ export default {
           this.majorList = res.data.records
         }
       });
+    },getUserList(val) {
+      const data = {
+        deptName: '业务部',
+        name: val
+      };
+      getUserList(data).then(res => {
+        if (res.flag) {
+          this.loading = false
+          this.userList = res.data
+        }
+      });
     }, fetchSupplierList(val) {
       const data = {
         pageNum: 1,
@@ -958,7 +985,7 @@ export default {
       };
       getSupplierList(data, val).then(res => {
         if (res.flag) {
-          this.loading = false;
+          this.loading = false
           this.supplierList = res.data.records
         }
       });
@@ -981,6 +1008,13 @@ export default {
       if (query !== '') {
         this.loading = true
         this.fetchSupplierList({supplierName: query})
+      } else {
+        this.supplierList = [];
+      }
+    }, remoteMethod4(query) {
+      if (query !== '') {
+        this.loading = true
+        this.getUserList(query)
       } else {
         this.supplierList = [];
       }

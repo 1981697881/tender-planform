@@ -235,3 +235,16 @@ export function getByUserAndPrId(params) {
     method: 'get'
   })
 }
+// 用户管理-获取用户列表
+export function getUserList(params) {
+  const url = '/Admin/user/getUserList'
+  return request({
+    url: url,
+    headers: {
+      'authorization': getToken('tenderrx'),
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    data: params
+  })
+}
