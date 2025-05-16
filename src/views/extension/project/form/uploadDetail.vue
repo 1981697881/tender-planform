@@ -155,6 +155,7 @@
                 width="100">
                 <template slot-scope="scope">
                   <el-button @click="handleUpdate(scope.row)" type="text" size="small">下载</el-button>
+                  <el-button @click="handleDelete(scope.row)" type="text" size="small">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -170,6 +171,7 @@
 
 <script>import {addProjectInitiation,uploadFileList,addUploadFile} from '@/api/extension/index'
 import {getUsersList} from '@/api/system/index'
+import {deleteUploadFile} from '@/api/basic/index'
 import {
   getToken
 } from '@/utils/auth'
@@ -311,19 +313,18 @@ export default {
     handleUpdate(item) {
       ajax.downloadFile(`${this.$store.state.user.url}/tenderings/file/download?fileName=` + item.fileName, {}, {fileName: item.fileName})
     },
-    handleDetele(item) {
-      if (item.starId) {
-        this.$confirm('是否删除(' + item.starName + ')，删除后将无法恢复?', '提示', {
+    handleDelete(item) {
+      if (item.id) {
+        this.$confirm('是否删除(' + item.fileName + ')，删除后将无法恢复?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.list.some((item, index) => {
-            if (item.starId == item.starId) {
-              this.list.splice(index, 1)
-              return true
+          deleteUploadFile([{id: item.id}]).then(res => {
+            if (res.flag) {
+              this.fetchFileData({projectId: this.form.id})
             }
-          })
+          });
         }).catch(() => {
           this.$message({
             type: 'info',
